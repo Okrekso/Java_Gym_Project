@@ -87,6 +87,10 @@ public class ColumnBuilder<T> {
      * @return return value as string
      */
     public String get() {
-        return (String)value;
+        return "'" + (String)value + "'";
+    }
+
+    public static String coverByQuotes(Object value) {
+        return "'" + (String)value + "'";
     }
 }
