@@ -2,7 +2,7 @@ package database;
 
 import java.sql.JDBCType;
 
-public class ColumnBuilder<T> {
+public class DBValue<T> {
     String title;
     T value;
     T defaultValue;
@@ -15,43 +15,51 @@ public class ColumnBuilder<T> {
 
     String foreignKey;
 
-    public ColumnBuilder(String title, T value, JDBCType type) {
+    public DBValue(String title, T value, JDBCType type) {
         this.title = title;
         this.value = value;
         this.type = type;
     }
 
-    public ColumnBuilder(String title, JDBCType type) {
+    public DBValue(String title, JDBCType type) {
         this.title = title;
         this.type = type;
     }
 
-    public ColumnBuilder addSize(int size) {
+    public String inQuotes() {
+        return DBValue.coverByQuotes(value);
+    }
+
+    public String forSet() {
+        return title+"="+DBValue.coverByQuotes(value);
+    }
+
+    public DBValue addSize(int size) {
         this.size = size;
         return this;
     }
 
-    public ColumnBuilder addPrimaryKey() {
+    public DBValue addPrimaryKey() {
         this.isPrimary = true;
         return this;
     }
 
-    public ColumnBuilder addForeignKey(String tableID, String keyID) {
+    public DBValue addForeignKey(String tableID, String keyID) {
         this.foreignKey = String.format("%s(%s)", tableID, keyID);
         return this;
     }
 
-    public ColumnBuilder addDefaultValue(T value) {
+    public DBValue addDefaultValue(T value) {
         this.defaultValue = value;
         return this;
     }
 
-    public ColumnBuilder addNotNull() {
+    public DBValue addNotNull() {
         this.isNotNull = true;
         return this;
     }
 
-    public ColumnBuilder addAutoIncrement() {
+    public DBValue addAutoIncrement() {
         this.isAutoIncrement = true;
         return this;
     }
@@ -83,11 +91,8 @@ public class ColumnBuilder<T> {
         return result;
     }
 
-    /**
-     * @return return value as string
-     */
-    public String get() {
-        return "'" + (String)value + "'";
+    public T getValue() {
+        return value;
     }
 
     public static String coverByQuotes(Object value) {

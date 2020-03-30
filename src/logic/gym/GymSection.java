@@ -1,41 +1,41 @@
 package logic.gym;
 
-import database.ColumnBuilder;
+import database.DBValue;
 import database.DBEntity;
-import database.Database;
 import database.GymDB;
 
 import java.sql.JDBCType;
-import java.sql.SQLType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class GymSection extends DBEntity {
-    private String title;
-    private String description;
-    private int maxPeopleCapacity;
-    private int gymID;
+    private DBValue<String> title;
+    private DBValue<String> description;
+    private DBValue<Integer> maxPeopleCapacity;
+    private DBValue<Integer> gymID;
 
     public GymSection(int gymSectionID, int gymID, String title, String description, int maxPeopleCapacity) {
-        super("GymSections", gymSectionID, new GymDB());
-        this.title = title;
-        this.description = description;
-        this.maxPeopleCapacity = maxPeopleCapacity;
-        this.gymID = gymID;
+        super("GymSections", new DBValue("gymSectionID", gymSectionID, JDBCType.INTEGER), new GymDB());
+        this.title = new DBValue<>("title", title, JDBCType.NVARCHAR).addSize(255);
+        this.description = new DBValue<>("description", description, JDBCType.NVARCHAR).addSize(255);
+        this.maxPeopleCapacity = new DBValue<>("maxPeopleCapacity", maxPeopleCapacity, JDBCType.INTEGER)
+                .addNotNull().addDefaultValue(1);
+        this.gymID = new DBValue<>("gymID", gymID, JDBCType.INTEGER).addForeignKey("Gyms", "gymID");
     }
 
 
     public int getMaxPeopleCapacity() {
-        return maxPeopleCapacity;
+        return maxPeopleCapacity.getValue();
     }
 
     public String getDescription() {
-        return description;
+        return description.getValue();
     }
 
     public String getTitle() {
-        return title;
+        return title.getValue();
     }
 
     @Override
@@ -49,19 +49,24 @@ public class GymSection extends DBEntity {
     }
 
     @Override
-    public String getVariables() {
-        return title + ", " + description + ", " + maxPeopleCapacity + ", " + gymID;
+    public boolean add() {
+        return false;
+    }
+
+    @Override
+    public String getVariables(boolean set) {
+        List<DBValue>vars = Arrays.asList(title, description, maxPeopleCapacity, gymID);
+        return vars.stream().map((val)->set ? val.forSet() : val.inQuotes()).collect(Collectors.joining(", "));
     }
 
     @Override
     public String getColumns() {
-        List<String> columns = new ArrayList<String>(Arrays.asList(
-                new ColumnBuilder<Integer>("gymSectionID", JDBCType.INTEGER).addPrimaryKey().build(),
-                new ColumnBuilder<String>("title", JDBCType.NVARCHAR).addSize(255).build(),
-                new ColumnBuilder<String>("description", JDBCType.NVARCHAR).addSize(255).build(),
-                new ColumnBuilder<Integer>("maxPeopleCapacity", JDBCType.INTEGER).addNotNull().addDefaultValue(1).build(),
-                new ColumnBuilder<Integer>("gymID", JDBCType.INTEGER).addForeignKey("Gyms", "GymID").build()
-        ));
-        return String.join(", ", columns);
+        return Arrays.asList(
+                entityID.build(),
+                title.build(),
+                description.build(),
+                maxPeopleCapacity.build(),
+                gymID.build()
+        ).stream().collect(Collectors.joining(", "));
     }
 }

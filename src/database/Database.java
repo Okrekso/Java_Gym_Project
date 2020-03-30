@@ -4,25 +4,30 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.function.Function;
 
 public abstract class Database {
     protected String connectionURL;
     protected String user;
     protected String password;
+    protected boolean driverFound=false;
 
     public Database(String connectionURL, String user, String password) {
         this.connectionURL = connectionURL;
         this.user = user;
         this.password = password;
+        try {
+            Class.forName("org.h2.Driver");
+            this.driverFound = true;
+        } catch (ClassNotFoundException e) {
+
+        }
     }
 
     public boolean isConnected() {
         try {
-            Class.forName("org.h2.Driver");
             Connection con = DriverManager.getConnection(connectionURL, user, password);
             return true;
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
             return false;
         }
@@ -43,6 +48,20 @@ public abstract class Database {
         }
     }
 
+    public boolean insertIntoTable(String tableID, String dataTemplate, String data) {
+        ResultSet res = execute(String.format("INSERT INTO %s(%s) VALUES(%s)", tableID, dataTemplate, data));
+        return res==null;
+    }
+
+    public boolean updateTable(String tableID, String setVariables, String condition) {
+        ResultSet res = execute(String.format("UPDATE %s SET %s WHERE %s", tableID, setVariables, condition));
+        return res==null;
+    }
+    public boolean updateTable(String tableID, String setVariables) {
+        ResultSet res = execute(String.format("UPDATE %s SET %s", tableID, setVariables));
+        return res==null;
+    }
+
     /**
      * @return is connection successfully
      * @throws SQLException mean that connection failed somehow
@@ -56,10 +75,4 @@ public abstract class Database {
      * @return is add process finished successfully
      */
     public abstract boolean addToTable(DBEntity entity);
-
-    /**
-     * @param entity element which'll be base for a table to create
-     * @return is creation successfully
-     */
-    public abstract boolean createTableFromEntity(DBEntity entity);
 }

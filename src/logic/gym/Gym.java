@@ -1,6 +1,6 @@
 package logic.gym;
 
-import database.ColumnBuilder;
+import database.DBValue;
 import database.DBEntity;
 import database.GymDB;
 
@@ -8,19 +8,20 @@ import java.sql.JDBCType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class Gym extends DBEntity {
     private List<GymSection> gymSections;
     private List<Subscription> subscriptions;
 
-    private String title;
-    private String address;
+    private DBValue<String> title;
+    private DBValue<String> address;
 
-    protected Gym(int gymID, String title, String address) {
-        super("Gyms", gymID, new GymDB());
-        this.title = title;
-        this.address = address;
+    public Gym(int gymID, String title, String address) {
+        super("Gyms", new DBValue("gymID", gymID, JDBCType.INTEGER), new GymDB());
+        this.title = new DBValue<>("title", title, JDBCType.NVARCHAR).addSize(255).addNotNull();
+        this.address = new DBValue<>("address", address, JDBCType.NVARCHAR).addSize(255).addNotNull();
     }
 
 
@@ -29,11 +30,11 @@ public class Gym extends DBEntity {
     }
 
     public String getTitle() {
-        return title;
+        return title.getValue();
     }
 
     public String getAddress() {
-        return address;
+        return address.getValue();
     }
 
     public List<Subscription> getSubscriptions() {
@@ -51,17 +52,22 @@ public class Gym extends DBEntity {
     }
 
     @Override
-    public String getVariables() {
-        return this.title+", "+this.address;
+    public boolean add() {
+        return false;
+    }
+
+    @Override
+    public String getVariables(boolean set) {
+        List<DBValue>vars = Arrays.asList(title, address);
+        return vars.stream().map((val)->set ? val.forSet() : val.inQuotes()).collect(Collectors.joining(", "));
     }
 
     @Override
     public String getColumns() {
-        List<String> columns = new ArrayList<>(Arrays.asList(
-                new ColumnBuilder<Integer>("gymID", JDBCType.INTEGER).build(),
-                new ColumnBuilder<String>("title", JDBCType.NVARCHAR).addSize(255).addNotNull().build(),
-                new ColumnBuilder<String>("address",JDBCType.NVARCHAR).addSize(255).addNotNull().build()
-        ));
-        return String.join(", ", columns);
+        return Arrays.asList(
+                entityID.build(),
+                title.build(),
+                address.build()
+        ).stream().collect(Collectors.joining(", "));
     }
 }

@@ -2,12 +2,12 @@ package database;
 
 public abstract class DBEntity implements IDBEntity {
     protected String tableID;
-    protected int entityID;
+    protected DBValue<Integer> entityID;
     protected Database db;
 
-    protected DBEntity(String tableID, int entityID, Database db) {
+    protected DBEntity(String tableID, DBValue entityID, Database db) {
         this.tableID = tableID;
-        this.entityID = entityID;
+        this.entityID = entityID.addPrimaryKey();
         this.db = db;
     }
 }
