@@ -7,6 +7,7 @@ import logic.gym.Subscription;
 import logic.gym.Visit;
 import logic.visitors.Member;
 
+import java.sql.ResultSet;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -17,11 +18,11 @@ public class GymDB extends Database {
         super("jdbc:h2:mem:gymdb", user, password);
     }
     public GymDB() {
-        super("jdbc:h2:mem:gymdb", "root", "");
+        super("jdbc:h2:mem:gymdb", "PUBLIC", "");
     }
     @Override
     public boolean addToTable(DBEntity entity) {
-        this.execute("INSERT INTO TABLE " + entity.tableID + "(" + entity.getVariables(false) + ")");
+        this.executeQuery("INSERT INTO TABLE " + entity.tableID + "(" + entity.getVariables(false) + ")");
         return true;
     }
 
@@ -29,7 +30,11 @@ public class GymDB extends Database {
         return "CREATE TABLE "+entity.tableID+"("+entity.getColumns()+")";
     }
 
-    public String buildNewGymDB() {
+    public boolean isDBcreated() {
+        return executeQuery("SELECT * FROM Info") != null;
+    }
+
+    public boolean buildNewGymDB() {
         GymDB db = new GymDB();
         List<String> queries = Arrays.asList(
                 db.getTableCreationQuery(new Info(0, new Date(), "DB Creation")),
@@ -40,6 +45,9 @@ public class GymDB extends Database {
                 db.getTableCreationQuery(new Visit(0, new Date(), 0, 0))
 
         );
-        return queries.stream().collect(Collectors.joining(";\n"));
+        for(String query : queries) {
+            db.execute(query);
+        }
+        return true;
     }
 }

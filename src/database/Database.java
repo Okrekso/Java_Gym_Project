@@ -37,7 +37,21 @@ public abstract class Database {
      * @param query query to execute on database
      * @return is query execution was successful, returns ResultSet
      */
-    public ResultSet execute(String query) {
+    public boolean execute(String query) {
+        if(!isConnected()) return false;
+        try {
+            Connection con = this.getConnection();
+            int result = con.createStatement().executeUpdate(query);
+            con.commit();
+            con.close();
+            return true;
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
+    public ResultSet executeQuery(String query) {
+        if(!isConnected()) return null;
         try {
             Connection con = this.getConnection();
             ResultSet result = con.createStatement().executeQuery(query);
@@ -49,17 +63,16 @@ public abstract class Database {
     }
 
     public boolean insertIntoTable(String tableID, String dataTemplate, String data) {
-        ResultSet res = execute(String.format("INSERT INTO %s(%s) VALUES(%s)", tableID, dataTemplate, data));
+        ResultSet res = executeQuery(String.format("INSERT INTO %s(%s) VALUES(%s)", tableID, dataTemplate, data));
         return res==null;
     }
 
     public boolean updateTable(String tableID, String setVariables, String condition) {
-        ResultSet res = execute(String.format("UPDATE %s SET %s WHERE %s", tableID, setVariables, condition));
+        ResultSet res = executeQuery(String.format("UPDATE %s SET %s WHERE %s", tableID, setVariables, condition));
         return res==null;
     }
     public boolean updateTable(String tableID, String setVariables) {
-        ResultSet res = execute(String.format("UPDATE %s SET %s", tableID, setVariables));
-        return res==null;
+        return execute(String.format("UPDATE %s SET %s", tableID, setVariables));
     }
 
     /**
