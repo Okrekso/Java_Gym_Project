@@ -5,30 +5,27 @@ import database.DBEntity;
 import database.GymDB;
 
 import java.sql.JDBCType;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class GymSection extends DBEntity {
+public class Subscription extends DBEntity {
+    private DBValue<Float> price;
+    private DBValue<Integer> duration;
     private DBValue<String> title;
     private DBValue<String> description;
-    private DBValue<Integer> maxPeopleCapacity;
-    private DBValue<Integer> gymID;
+    private List<GymSection> accessSections;
 
-    public GymSection(int gymSectionID, int gymID, String title, String description, int maxPeopleCapacity) {
-        super("GymSections", new DBValue("gymSectionID", gymSectionID, JDBCType.INTEGER), new GymDB());
-        this.title = new DBValue<>("title", title, JDBCType.NVARCHAR).addSize(255);
+    public Subscription(int subscriptionID, float price, Integer duration, String title, String description) {
+        super("subscriptions", new DBValue("subscriptionID", subscriptionID, JDBCType.INTEGER), new GymDB());
+        this.price = new DBValue<>("price", price, JDBCType.FLOAT).addNotNull().addDefaultValue(1);
+        this.duration = new DBValue<>("duration", duration, JDBCType.INTEGER).addNotNull().addDefaultValue(7);
+        this.title = new DBValue<>("title", title, JDBCType.NVARCHAR).addSize(255).addNotNull();
         this.description = new DBValue<>("description", description, JDBCType.NVARCHAR).addSize(255);
-        this.maxPeopleCapacity = new DBValue<>("maxPeopleCapacity", maxPeopleCapacity, JDBCType.INTEGER)
-                .addNotNull().addDefaultValue(1);
-        this.gymID = new DBValue<>("gymID", gymID, JDBCType.INTEGER).addForeignKey("Gyms", "gymID");
     }
 
-
-    public int getMaxPeopleCapacity() {
-        return maxPeopleCapacity.getValue();
-    }
 
     public String getDescription() {
         return description.getValue();
@@ -36,6 +33,18 @@ public class GymSection extends DBEntity {
 
     public String getTitle() {
         return title.getValue();
+    }
+
+    public double getPrice() {
+        return price.getValue();
+    }
+
+    public Integer getDuration() {
+        return duration.getValue();
+    }
+
+    public List<GymSection> getAccessSections() {
+        return accessSections;
     }
 
     @Override
@@ -55,7 +64,7 @@ public class GymSection extends DBEntity {
 
     @Override
     public String getVariables(boolean set) {
-        List<DBValue>vars = Arrays.asList(title, description, maxPeopleCapacity, gymID);
+        List<DBValue>vars = Arrays.asList(title, description, price, duration);
         return vars.stream().map((val)->set ? val.forSet() : val.inQuotes()).collect(Collectors.joining(", "));
     }
 
@@ -65,8 +74,9 @@ public class GymSection extends DBEntity {
                 entityID.build(),
                 title.build(),
                 description.build(),
-                maxPeopleCapacity.build(),
-                gymID.build()
+                price.build(),
+                duration.build()
         ).stream().collect(Collectors.joining(", "));
     }
 }
+

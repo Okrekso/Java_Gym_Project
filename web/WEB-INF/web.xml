@@ -3,4 +3,21 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
+    <servlet>
+        <servlet-name>IndexServlet</servlet-name>
+        <servlet-class>servlets.IndexServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>IndexServlet</servlet-name>
+        <url-pattern>/index</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>dbCreation</servlet-name>
+        <jsp-file>/DBCreation.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>dbCreation</servlet-name>
+        <url-pattern>/db-create</url-pattern>
+    </servlet-mapping>
 </web-app>
