@@ -1,6 +1,6 @@
 package logic.visitors;
 
-import logic.Subscription;
+import logic.gym.Subscription;
 
 public interface ISubscriptable {
     public void subscribe(Subscription subscription);
