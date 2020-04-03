@@ -53,7 +53,8 @@ public class Info extends DBEntity {
 
     @Override
     public String getDisplayValue() {
-        return this.event.getValue();
+        return Arrays.asList(this.event.getValue(), date.getValue())
+                .stream().collect(Collectors.joining(", "));
     }
 
     @Override
