@@ -18,12 +18,12 @@
     <% if (!new GymDB().isDBcreated()) { %>
         <h2>Database not created</h2>
     <% }
-    if(request.getAttribute("drop success")==null) { %>
+    if(request.getAttribute("drop success")==null && new GymDB().isDBcreated()) { %>
         <h2>Database exist</h2>
         <form action="/db-drop/submit" method="post">
             <button type="submit">drop database</button>
         </form>
-    <% } else { %>
+    <% } else if(request.getAttribute("drop success")!=null) { %>
         <h2>Database dropped successfully!</h2>
         <a href="/">go back</a>
     <% } %>
