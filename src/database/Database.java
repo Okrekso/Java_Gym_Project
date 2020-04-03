@@ -67,6 +67,13 @@ public abstract class Database {
         return res==null;
     }
 
+    public ResultSet getFromTable(String tableID, String condition) {
+        return executeQuery(String.format("SELECT * FROM %s WHERE %s", tableID, condition));
+    }
+    public ResultSet getFromTable(String tableID) {
+        return executeQuery(String.format("SELECT * FROM %s", tableID));
+    }
+
     public boolean updateTable(String tableID, String setVariables, String condition) {
         ResultSet res = executeQuery(String.format("UPDATE %s SET %s WHERE %s", tableID, setVariables, condition));
         return res==null;

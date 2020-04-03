@@ -58,11 +58,6 @@ public class Subscription extends DBEntity {
     }
 
     @Override
-    public boolean add() {
-        return false;
-    }
-
-    @Override
     public String getVariables(boolean set) {
         List<DBValue>vars = Arrays.asList(title, description, price, duration);
         return vars.stream().map((val)->set ? val.forSet() : val.inQuotes()).collect(Collectors.joining(", "));
