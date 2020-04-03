@@ -64,8 +64,7 @@ public abstract class Database {
     }
 
     protected boolean insertIntoTable(String tableID, String dataTemplate, String data) {
-        ResultSet res = executeQuery(String.format("INSERT INTO %s(%s) VALUES(%s)", tableID, dataTemplate, data));
-        return res==null;
+        return execute(String.format("INSERT INTO %s(%s) VALUES(%s)", tableID, dataTemplate, data));
     }
 
     public List<IDBEntity> getFromEntityTable(DBEntity entity, String condition) {
@@ -74,6 +73,7 @@ public abstract class Database {
     }
     public List<IDBEntity> getFromEntityTable(DBEntity entity) {
         ResultSet set = executeQuery(String.format("SELECT * FROM %s", entity.getTableID()));
+
         return entity.getListFromResultSet(set);
     }
 

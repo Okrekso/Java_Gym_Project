@@ -27,7 +27,7 @@ public class Info extends DBEntity {
 
     public Info(int infoID, Date date, String event) {
         super("Infos", new DBValue("infoID", infoID, JDBCType.INTEGER), new GymDB());
-        this.date = new DBValue<>("date", new SimpleDateFormat("dd-MM-YYYY").format(date), JDBCType.DATE);
+        this.date = new DBValue<>("date", new SimpleDateFormat("YYYY-MM-dd").format(date), JDBCType.DATE);
         this.event = new DBValue<>("event", event, JDBCType.NVARCHAR).addSize(255);
     }
 
@@ -61,10 +61,10 @@ public class Info extends DBEntity {
                 Integer infoID = (Integer)resultSet.getObject(entityID.getTitle());
                 String date = (String)resultSet.getObject(this.date.getTitle());
                 String event = (String)resultSet.getObject(this.event.getTitle());
-                entities.add(new Info(infoID, new Date(), event));
+                entities.add(new Info(infoID, new SimpleDateFormat().parse(date), event));
             }
             return entities;
-        } catch (SQLException ex) {
+        } catch (SQLException | ParseException ex) {
             return null;
         }
     }

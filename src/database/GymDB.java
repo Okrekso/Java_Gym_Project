@@ -40,8 +40,7 @@ public class GymDB extends Database {
         for(String query : queries) {
             db.execute(query);
         }
-        addToTable(new Info(0, new Date(), "DB creation"));
-        return true;
+        return addToTable(new Info(0, new Date(), "DB creation"));
     }
 
     /**
