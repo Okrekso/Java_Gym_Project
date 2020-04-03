@@ -36,17 +36,33 @@ public class GymDB extends Database {
 
     public boolean buildNewGymDB() {
         GymDB db = new GymDB();
-        List<String> queries = Arrays.asList(
-                db.getTableCreationQuery(new Info(0, new Date(), "DB Creation")),
-                db.getTableCreationQuery(new Gym(0,"", "")),
-                db.getTableCreationQuery(new GymSection(0, 0, "", "", 0)),
-                db.getTableCreationQuery(new Subscription(0, 0, 1, "", "")),
-                db.getTableCreationQuery(new Member(0, "", "", new Date())),
-                db.getTableCreationQuery(new Visit(0, new Date(), 0, 0))
-
-        );
+        List<String> queries = getDBentities().stream().map(dbEntity -> db.getTableCreationQuery(dbEntity)).collect(Collectors.toList());
         for(String query : queries) {
             db.execute(query);
+        }
+        return true;
+    }
+
+    /**
+     * @return all possible entities exists in database
+     */
+    public List<DBEntity> getDBentities() {
+        return Arrays.asList(
+                new Info(0, new Date(), "DB Creation"),
+                new Gym(0,"", ""),
+                new GymSection(0, 0, "", "", 0),
+                new Subscription(0, 0, 1, "", ""),
+                new Member(0, "", "", new Date()),
+                new Visit(0, new Date(), 0, 0)
+        );
+    }
+
+    public boolean dropCurrentDB() {
+        GymDB db = new GymDB();
+        List<String> tableIDs = getDBentities().stream().map(dbEntity -> dbEntity.tableID).collect(Collectors.toList());
+        for(String tableID : tableIDs) {
+            if(!db.execute("DROP TABLE " + tableID))
+                return false;
         }
         return true;
     }

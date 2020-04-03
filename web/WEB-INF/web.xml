@@ -3,6 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
+    <!--index servlet-->
     <servlet>
         <servlet-name>IndexServlet</servlet-name>
         <jsp-file>/Index.jsp</jsp-file>
@@ -11,7 +12,7 @@
         <servlet-name>IndexServlet</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
-
+    <!--db creation servlet-->
     <servlet>
         <servlet-name>dbCreation</servlet-name>
         <jsp-file>/DBCreation.jsp</jsp-file>
@@ -20,7 +21,7 @@
         <servlet-name>dbCreation</servlet-name>
         <url-pattern>/db-create</url-pattern>
     </servlet-mapping>
-
+    <!--db creation submit servlet-->
     <servlet>
         <servlet-name>dbCreationSubmit</servlet-name>
         <servlet-class>servlets.DBCreationSubmitServlet</servlet-class>
@@ -29,4 +30,23 @@
         <servlet-name>dbCreationSubmit</servlet-name>
         <url-pattern>/db-create/submit</url-pattern>
     </servlet-mapping>
+    <!--db drop servlet-->
+    <servlet>
+        <servlet-name>dbDrop</servlet-name>
+        <jsp-file>/DBDrop.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>dbDrop</servlet-name>
+        <url-pattern>/db-drop</url-pattern>
+    </servlet-mapping>
+    <!--db drop submit servlet-->
+    <servlet>
+        <servlet-name>dbDropSubmit</servlet-name>
+        <servlet-class>servlets.DBDropSubmitServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>dbDropSubmit</servlet-name>
+        <url-pattern>/db-drop/submit</url-pattern>
+    </servlet-mapping>
+
 </web-app>

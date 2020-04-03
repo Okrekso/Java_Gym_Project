@@ -35,12 +35,14 @@
         <a class="big-a" href="/db-create">Database Creation</a>
         <h2>Database Entities</h2>
         <% if (new GymDB().isDBcreated()) { %>
-            <a class="big-a" >Gyms</a>
-            <a class="big-a" >Gyms Sections</a>
-        <a class="big-a" >Gyms Sections</a>
+        <a class="big-a" >Gyms</a>
+        <a class="big-a">Info's</a>
         <% } else { %>
             <p>Database doesn't exist you need to <a href="/db-create">create it</a></p>
         <% } %>
+        <h2>Options</h2>
+        <a class="big-a" href="/db-drop">Drop DataBase</a>
+        <a class="big-a">Stop Server</a>
     </div>
 </body>
 </html>
