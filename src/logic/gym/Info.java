@@ -37,11 +37,6 @@ public class Info extends DBEntity {
     }
 
     @Override
-    public boolean add() {
-        return new GymDB().insertIntoTable("Info", "date, event", getVariables(false));
-    }
-
-    @Override
     public String getVariables(boolean set) {
         List<DBValue>vars = Arrays.asList(date, event);
         return vars.stream().map((val)->set ? val.forSet() : val.inQuotes()).collect(Collectors.joining(", "));

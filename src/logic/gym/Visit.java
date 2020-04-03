@@ -42,10 +42,6 @@ public class Visit extends DBEntity {
         return false;
     }
 
-    @Override
-    public boolean add() {
-        return false;
-    }
 
     @Override
     public String getVariables(boolean set) {

@@ -7,7 +7,6 @@ public interface IDBEntity {
 //    List<IDBEntity> getEntities() throws SQLException;
     boolean delete();
     boolean update();
-    boolean add();
 
     /**
      * @param set if true returned variables will be in format Param1='param1' instead of 'param1'

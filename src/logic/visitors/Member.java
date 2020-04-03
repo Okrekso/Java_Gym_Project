@@ -77,11 +77,6 @@ public class Member extends DBEntity implements IVisitor, ISubscriptable {
     }
 
     @Override
-    public boolean add() {
-        return false;
-    }
-
-    @Override
     public String getVariables(boolean set) {
         List<DBValue>vars = Arrays.asList(name, surname, birthday);
         return vars.stream().map((val)->set ? val.forSet() : val.inQuotes()).collect(Collectors.joining(", "));
