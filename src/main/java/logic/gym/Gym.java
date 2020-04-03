@@ -66,6 +66,11 @@ public class Gym extends DBEntity {
     }
 
     @Override
+    public String getDisplayValue() {
+        return null;
+    }
+
+    @Override
     public List<IDBEntity> getListFromResultSet(ResultSet resultSet) {
         return null;
     }

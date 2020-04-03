@@ -9,6 +9,10 @@ public abstract class DBEntity implements IDBEntity {
     protected DBValue<Integer> entityID;
     protected Database db;
 
+    public Integer getEntityID() {
+        return entityID.getValue();
+    }
+
     public String getTableID() {
         return tableID;
     }

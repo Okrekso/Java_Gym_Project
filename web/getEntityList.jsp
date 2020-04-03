@@ -22,5 +22,10 @@
 </head>
 <body>
     <header><%= tableID %> list</header>
+    <c:if test="${entities!=null}">
+        <c:forEach var="entity" items="${entities}">
+            <c:out value="${String.format('%s. %s', entity.getEntityID(), entity.getDisplayValue())}"/>
+        </c:forEach>
+    </c:if>
 </body>
 </html>

@@ -52,6 +52,11 @@ public class Info extends DBEntity {
     }
 
     @Override
+    public String getDisplayValue() {
+        return this.event.getValue();
+    }
+
+    @Override
     public List<IDBEntity> getListFromResultSet(ResultSet resultSet) throws SQLException {
             if(resultSet==null) return null;
             List<IDBEntity> entities = new ArrayList<>();
