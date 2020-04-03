@@ -3,8 +3,10 @@ package logic.gym;
 import database.DBValue;
 import database.DBEntity;
 import database.GymDB;
+import database.IDBEntity;
 
 import java.sql.JDBCType;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -58,11 +60,18 @@ public class Gym extends DBEntity {
     }
 
     @Override
-    public String getColumns() {
-        return Arrays.asList(
-                entityID.build(),
-                title.build(),
-                address.build()
-        ).stream().collect(Collectors.joining(", "));
+    public String getColumns(boolean initialization, boolean withID) {
+
+        return  super.getColumns(Arrays.asList(entityID, title,address), initialization, withID);
+    }
+
+    @Override
+    public String getDisplayValue() {
+        return null;
+    }
+
+    @Override
+    public List<IDBEntity> getListFromResultSet(ResultSet resultSet) {
+        return null;
     }
 }

@@ -51,7 +51,7 @@
 <!--    get entities-->
     <servlet>
         <servlet-name>getEntityList</servlet-name>
-        <servlet-class>servlets.entitiesOps.geEntityListServlet</servlet-class>
+        <servlet-class>servlets.entitiesOps.getEntityListServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>getEntityList</servlet-name>

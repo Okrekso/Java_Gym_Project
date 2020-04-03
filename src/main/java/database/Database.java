@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 public abstract class Database {
     protected String connectionURL;
@@ -55,23 +56,24 @@ public abstract class Database {
         try {
             Connection con = this.getConnection();
             ResultSet result = con.createStatement().executeQuery(query);
-            con.close();
+//            con.close();
             return result;
         } catch (SQLException e) {
             return null;
         }
     }
 
-    public boolean insertIntoTable(String tableID, String dataTemplate, String data) {
-        ResultSet res = executeQuery(String.format("INSERT INTO %s(%s) VALUES(%s)", tableID, dataTemplate, data));
-        return res==null;
+    protected boolean insertIntoTable(String tableID, String dataTemplate, String data) {
+        return execute(String.format("INSERT INTO %s(%s) VALUES(%s)", tableID, dataTemplate, data));
     }
 
-    public ResultSet getFromTable(String tableID, String condition) {
-        return executeQuery(String.format("SELECT * FROM %s WHERE %s", tableID, condition));
+    public List<IDBEntity> getFromEntityTable(DBEntity entity, String condition) throws SQLException {
+        ResultSet set = executeQuery(String.format("SELECT * FROM %s WHERE %s", entity.getTableID(), condition));
+        return entity.getListFromResultSet(set);
     }
-    public ResultSet getFromTable(String tableID) {
-        return executeQuery(String.format("SELECT * FROM %s", tableID));
+    public List<IDBEntity> getFromEntityTable(DBEntity entity) throws SQLException {
+        ResultSet set = executeQuery(String.format("SELECT * FROM %s", entity.getTableID()));
+        return entity.getListFromResultSet(set);
     }
 
     public boolean updateTable(String tableID, String setVariables, String condition) {
