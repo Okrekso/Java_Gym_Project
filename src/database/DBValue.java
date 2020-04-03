@@ -1,9 +1,10 @@
 package database;
 
 import java.sql.JDBCType;
+import java.sql.ResultSet;
 
 public class DBValue<T> {
-    String title;
+    private String title;
     T value;
     T defaultValue;
     JDBCType type;
@@ -97,5 +98,9 @@ public class DBValue<T> {
 
     public static String coverByQuotes(Object value) {
         return "'" + (String)value + "'";
+    }
+
+    public String getTitle() {
+        return title;
     }
 }

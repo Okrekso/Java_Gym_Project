@@ -2,6 +2,8 @@ package servlets.entitiesOps;
 
 import database.DBEntity;
 import database.GymDB;
+import database.IDBEntity;
+import logic.gym.Info;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @WebServlet(name = "geEntityListServlet")
 public class geEntityListServlet extends HttpServlet {
@@ -19,8 +22,12 @@ public class geEntityListServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String entity = (String)request.getParameter("entity");
-//        request.setAttribute("entities", new GymDB().getFromTable(entity.getTableID()));
-        request.setAttribute("entities", new GymDB().);
+        GymDB db = new GymDB();
+        List<DBEntity> findDBEntities = db.getDBentities().stream()
+                .filter(dbEntity -> dbEntity.getTableID().toLowerCase().equals(entity.toLowerCase())).collect(Collectors.toList());
+        DBEntity dbEntity = findDBEntities.get(0);
+        List<IDBEntity> dbEntities = db.getFromEntityTable(dbEntity);
+        request.setAttribute("entities", dbEntities);
         request.getRequestDispatcher("/getEntityList.jsp").forward(request, response);
     }
 }

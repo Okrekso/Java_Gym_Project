@@ -1,5 +1,6 @@
 package database;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -15,6 +16,8 @@ public interface IDBEntity {
     String getVariables(boolean set);
     /**
      * @return get column titles and types for query
+     * @param initialization if it's true than column should be returned for table initialization else just names
      */
-    String getColumns();
+    String getColumns(boolean initialization, boolean withID);
+    List<IDBEntity> getListFromResultSet(ResultSet resultSet);
 }

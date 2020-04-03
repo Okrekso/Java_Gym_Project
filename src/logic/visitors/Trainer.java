@@ -1,11 +1,9 @@
 package logic.visitors;
 
-import database.DBEntity;
-import database.DBValue;
-import database.Database;
-import database.GymDB;
+import database.*;
 
 import java.sql.JDBCType;
+import java.sql.ResultSet;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -40,12 +38,15 @@ public class Trainer extends DBEntity {
     }
 
     @Override
-    public String getColumns() {
-        return Arrays.asList(
-                entityID.build(),
-                name.build(),
-                surname.build(),
-                birthday.build()
-        ).stream().collect(Collectors.joining(", "));
+    public String getColumns(boolean initialization, boolean withID) {
+        return super.getColumns(Arrays.asList( entityID,
+                name,
+                surname,
+                birthday), initialization, withID);
+    }
+
+    @Override
+    public List<IDBEntity> getListFromResultSet(ResultSet resultSet) {
+        return null;
     }
 }

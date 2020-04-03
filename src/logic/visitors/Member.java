@@ -3,10 +3,12 @@ package logic.visitors;
 import database.DBValue;
 import database.DBEntity;
 import database.GymDB;
+import database.IDBEntity;
 import logic.gym.Subscription;
 import logic.gym.Visit;
 
 import java.sql.JDBCType;
+import java.sql.ResultSet;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -83,12 +85,15 @@ public class Member extends DBEntity implements IVisitor, ISubscriptable {
     }
 
     @Override
-    public String getColumns() {
-        return Arrays.asList(
-                entityID.build(),
-                name.build(),
-                surname.build(),
-                birthday.build()
-        ).stream().collect(Collectors.joining(", "));
+    public String getColumns(boolean initialization, boolean withID) {
+        return super.getColumns(Arrays.asList( entityID,
+                name,
+                surname,
+                birthday), initialization, withID);
+    }
+
+    @Override
+    public List<IDBEntity> getListFromResultSet(ResultSet resultSet) {
+        return null;
     }
 }

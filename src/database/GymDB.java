@@ -22,16 +22,16 @@ public class GymDB extends Database {
     }
     @Override
     public boolean addToTable(DBEntity entity) {
-        this.executeQuery("INSERT INTO TABLE " + entity.tableID + "(" + entity.getVariables(false) + ")");
-        return true;
+        return this.insertIntoTable(entity.getTableID(), entity.getColumns(false, false), entity.getVariables(false));
+//        return this.execute("INSERT INTO " + entity.tableID + "(" + entity.getVariables(false) + ")");
     }
 
     public String getTableCreationQuery(DBEntity entity) {
-        return "CREATE TABLE "+entity.tableID+"("+entity.getColumns()+")";
+        return "CREATE TABLE "+entity.tableID+"("+entity.getColumns(true, true)+")";
     }
 
     public boolean isDBcreated() {
-        return executeQuery("SELECT * FROM Info") != null;
+        return executeQuery("SELECT * FROM "+new Info(0, new Date(), "").getTableID()) != null;
     }
 
     public boolean buildNewGymDB() {

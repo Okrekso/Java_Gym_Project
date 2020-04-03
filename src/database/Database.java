@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 public abstract class Database {
     protected String connectionURL;
@@ -62,16 +63,18 @@ public abstract class Database {
         }
     }
 
-    public boolean insertIntoTable(String tableID, String dataTemplate, String data) {
+    protected boolean insertIntoTable(String tableID, String dataTemplate, String data) {
         ResultSet res = executeQuery(String.format("INSERT INTO %s(%s) VALUES(%s)", tableID, dataTemplate, data));
         return res==null;
     }
 
-    public ResultSet getFromTable(String tableID, String condition) {
-        return executeQuery(String.format("SELECT * FROM %s WHERE %s", tableID, condition));
+    public List<IDBEntity> getFromEntityTable(DBEntity entity, String condition) {
+        ResultSet set = executeQuery(String.format("SELECT * FROM %s WHERE %s", entity.getTableID(), condition));
+        return entity.getListFromResultSet(set);
     }
-    public ResultSet getFromTable(String tableID) {
-        return executeQuery(String.format("SELECT * FROM %s", tableID));
+    public List<IDBEntity> getFromEntityTable(DBEntity entity) {
+        ResultSet set = executeQuery(String.format("SELECT * FROM %s", entity.getTableID()));
+        return entity.getListFromResultSet(set);
     }
 
     public boolean updateTable(String tableID, String setVariables, String condition) {

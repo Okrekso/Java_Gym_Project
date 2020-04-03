@@ -3,8 +3,13 @@ package logic.gym;
 import database.DBValue;
 import database.DBEntity;
 import database.GymDB;
+import database.IDBEntity;
 
 import java.sql.JDBCType;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -21,8 +26,8 @@ public class Info extends DBEntity {
     DBValue<String> event;
 
     public Info(int infoID, Date date, String event) {
-        super("Info", new DBValue("infoID", infoID, JDBCType.INTEGER), new GymDB());
-        this.date = new DBValue<>("date", date.toString(), JDBCType.DATE);
+        super("Infos", new DBValue("infoID", infoID, JDBCType.INTEGER), new GymDB());
+        this.date = new DBValue<>("date", new SimpleDateFormat("dd-MM-YYYY").format(date), JDBCType.DATE);
         this.event = new DBValue<>("event", event, JDBCType.NVARCHAR).addSize(255);
     }
 
@@ -43,11 +48,24 @@ public class Info extends DBEntity {
     }
 
     @Override
-    public String getColumns() {
-        return Arrays.asList(
-                entityID.build(),
-                date.build(),
-                event.build()
-        ).stream().collect(Collectors.joining(", "));
+    public String getColumns(boolean initialization, boolean withID) {
+        return  super.getColumns(Arrays.asList(entityID, date,event), initialization, withID);
+    }
+
+    @Override
+    public List<IDBEntity> getListFromResultSet(ResultSet resultSet) {
+        try {
+            List<IDBEntity> entities = new ArrayList<>();
+            boolean is = resultSet.isClosed();
+            while(resultSet.next()) {
+                Integer infoID = (Integer)resultSet.getObject(entityID.getTitle());
+                String date = (String)resultSet.getObject(this.date.getTitle());
+                String event = (String)resultSet.getObject(this.event.getTitle());
+                entities.add(new Info(infoID, new Date(), event));
+            }
+            return entities;
+        } catch (SQLException ex) {
+            return null;
+        }
     }
 }
