@@ -1,5 +1,6 @@
 <%@ page import="logic.gym.Gym" %>
-<%@ page import="database.GymDB" %><%--
+<%@ page import="database.GymDB" %>
+<%@ page import="logic.gym.Info" %><%--
   Created by IntelliJ IDEA.
   User: semik
   Date: 31.03.2020
@@ -35,8 +36,10 @@
         <a class="big-a" href="/db-create">Database Creation</a>
         <h2>Database Entities</h2>
         <% if (new GymDB().isDBcreated()) { %>
-        <a class="big-a" >Gyms</a>
-        <a class="big-a">Info's</a>
+        <form action="/get-entities" method="get" style="display: flex; flex-direction: column;">
+            <button class="big-a" >Gyms</button>
+            <button class="big-a" name="entity" value="infos" type="submit">Info's</button>
+        </form>
         <% } else { %>
             <p>Database doesn't exist you need to <a href="/db-create">create it</a></p>
         <% } %>

@@ -9,8 +9,11 @@
 <html>
 <head>
     <title>Info's List</title>
+    <style>
+        <%@include file="styles/global.css"%>
+    </style>
 </head>
 <body>
-
+    <header>Entity list</header>
 </body>
 </html>

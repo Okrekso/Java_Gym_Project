@@ -48,5 +48,14 @@
         <servlet-name>dbDropSubmit</servlet-name>
         <url-pattern>/db-drop/submit</url-pattern>
     </servlet-mapping>
+<!--    get entities-->
+    <servlet>
+        <servlet-name>getEntityList</servlet-name>
+        <servlet-class>servlets.entitiesOps.geEntityListServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>getEntityList</servlet-name>
+        <url-pattern>/get-entities</url-pattern>
+    </servlet-mapping>
 
 </web-app>
