@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
  */
 public class Info extends DBEntity {
 
-    DBValue<Integer> infoID;
     DBValue<String> date;
     DBValue<String> event;
 
@@ -53,19 +52,16 @@ public class Info extends DBEntity {
     }
 
     @Override
-    public List<IDBEntity> getListFromResultSet(ResultSet resultSet) {
-        try {
+    public List<IDBEntity> getListFromResultSet(ResultSet resultSet) throws SQLException {
+            if(resultSet==null) return null;
             List<IDBEntity> entities = new ArrayList<>();
             boolean is = resultSet.isClosed();
             while(resultSet.next()) {
                 Integer infoID = (Integer)resultSet.getObject(entityID.getTitle());
-                String date = (String)resultSet.getObject(this.date.getTitle());
+                Date date = resultSet.getDate(this.date.getTitle());
                 String event = (String)resultSet.getObject(this.event.getTitle());
-                entities.add(new Info(infoID, new SimpleDateFormat().parse(date), event));
+                entities.add(new Info(infoID, date, event));
             }
             return entities;
-        } catch (SQLException | ParseException ex) {
-            return null;
-        }
     }
 }

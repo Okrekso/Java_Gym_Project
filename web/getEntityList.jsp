@@ -1,4 +1,7 @@
-<%--
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page import="database.DBEntity" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.ArrayList" %><%--
   Created by IntelliJ IDEA.
   User: semik
   Date: 03.04.2020
@@ -8,12 +11,16 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Info's List</title>
+    <%
+        List<DBEntity> entities = (ArrayList)request.getAttribute("entities");
+        String tableID = entities == null ? "Empty" : entities.get(0).getTableID();
+    %>
+    <title><%= tableID %> List</title>
     <style>
         <%@include file="styles/global.css"%>
     </style>
 </head>
 <body>
-    <header>Entity list</header>
+    <header><%= tableID %> list</header>
 </body>
 </html>

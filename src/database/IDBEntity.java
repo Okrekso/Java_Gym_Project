@@ -19,5 +19,5 @@ public interface IDBEntity {
      * @param initialization if it's true than column should be returned for table initialization else just names
      */
     String getColumns(boolean initialization, boolean withID);
-    List<IDBEntity> getListFromResultSet(ResultSet resultSet);
+    List<IDBEntity> getListFromResultSet(ResultSet resultSet) throws SQLException;
 }

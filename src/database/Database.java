@@ -56,7 +56,7 @@ public abstract class Database {
         try {
             Connection con = this.getConnection();
             ResultSet result = con.createStatement().executeQuery(query);
-            con.close();
+//            con.close();
             return result;
         } catch (SQLException e) {
             return null;
@@ -67,13 +67,12 @@ public abstract class Database {
         return execute(String.format("INSERT INTO %s(%s) VALUES(%s)", tableID, dataTemplate, data));
     }
 
-    public List<IDBEntity> getFromEntityTable(DBEntity entity, String condition) {
+    public List<IDBEntity> getFromEntityTable(DBEntity entity, String condition) throws SQLException {
         ResultSet set = executeQuery(String.format("SELECT * FROM %s WHERE %s", entity.getTableID(), condition));
         return entity.getListFromResultSet(set);
     }
-    public List<IDBEntity> getFromEntityTable(DBEntity entity) {
+    public List<IDBEntity> getFromEntityTable(DBEntity entity) throws SQLException {
         ResultSet set = executeQuery(String.format("SELECT * FROM %s", entity.getTableID()));
-
         return entity.getListFromResultSet(set);
     }
 
