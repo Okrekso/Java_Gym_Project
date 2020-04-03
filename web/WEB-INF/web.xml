@@ -24,7 +24,7 @@
     <!--db creation submit servlet-->
     <servlet>
         <servlet-name>dbCreationSubmit</servlet-name>
-        <servlet-class>servlets.DBCreationSubmitServlet</servlet-class>
+        <servlet-class>servlets.dbOps.DBCreationSubmitServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>dbCreationSubmit</servlet-name>
@@ -42,7 +42,7 @@
     <!--db drop submit servlet-->
     <servlet>
         <servlet-name>dbDropSubmit</servlet-name>
-        <servlet-class>servlets.DBDropSubmitServlet</servlet-class>
+        <servlet-class>servlets.dbOps.DBDropSubmitServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>dbDropSubmit</servlet-name>

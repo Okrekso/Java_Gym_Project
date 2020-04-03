@@ -1,7 +1,6 @@
-package servlets;
+package servlets.dbOps;
 
 import database.GymDB;
-import logic.gym.Gym;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

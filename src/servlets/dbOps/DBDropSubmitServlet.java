@@ -1,4 +1,4 @@
-package servlets;
+package servlets.dbOps;
 
 import database.GymDB;
 
