@@ -17,12 +17,12 @@ import java.util.stream.Collectors;
 public class Info extends DBEntity {
 
     DBValue<Integer> infoID;
-    DBValue<Date> date;
+    DBValue<String> date;
     DBValue<String> event;
 
     public Info(int infoID, Date date, String event) {
         super("Info", new DBValue("infoID", infoID, JDBCType.INTEGER), new GymDB());
-        this.date = new DBValue<>("date", date, JDBCType.DATE);
+        this.date = new DBValue<>("date", date.toString(), JDBCType.DATE);
         this.event = new DBValue<>("event", event, JDBCType.NVARCHAR).addSize(255);
     }
 
@@ -34,11 +34,6 @@ public class Info extends DBEntity {
     @Override
     public boolean update() {
         return new GymDB().updateTable("Info", getVariables(true));
-    }
-
-    @Override
-    public boolean add() {
-        return new GymDB().insertIntoTable("Info", "date, event", getVariables(false));
     }
 
     @Override
