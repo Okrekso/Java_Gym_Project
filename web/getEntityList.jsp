@@ -18,14 +18,42 @@
     <title><%= tableID %> List</title>
     <style>
         <%@include file="styles/global.css"%>
+        table {
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        tr:hover > td {
+            background: #bcbcbc;
+            color:white;
+        }
+        td{
+            text-align: center;
+        }
     </style>
 </head>
 <body>
     <header><%= tableID %> list</header>
     <c:if test="${entities!=null}">
+    <table>
+        <tr>
+            <c:forEach var="entitiy" items="${entities}">
+<%--                <c:out value="${entitiy.getVariables()}"--%>
+                <c:forEach var="dbValue" items="${entitiy.getVariables()}">
+                    <th><c:out value="${dbValue.getTitle()}"></c:out></th>
+                </c:forEach>
+            </c:forEach>
+        </tr>
         <c:forEach var="entity" items="${entities}">
-            <c:out value="${String.format('%s. %s', entity.getEntityID(), entity.getDisplayValue())}"/>
+            <tr>
+                <c:forEach var="dbValue" items="${entity.getVariables()}">
+                    <td><c:out value="${dbValue.getValue()}"/></td>
+<%--                    <%=entities.get(0).getVariables().get(0).getValue()%>--%>
+                </c:forEach>
+            </tr>
         </c:forEach>
+    </table>
     </c:if>
 </body>
 </html>

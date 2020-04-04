@@ -93,6 +93,11 @@ public class Member extends DBEntity implements IVisitor, ISubscriptable {
     }
 
     @Override
+    public List<DBValue> getVariables() {
+        return null;
+    }
+
+    @Override
     public String getDisplayValue() {
         return null;
     }

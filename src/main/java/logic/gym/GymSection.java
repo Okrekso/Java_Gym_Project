@@ -64,6 +64,11 @@ public class GymSection extends DBEntity {
     }
 
     @Override
+    public List<DBValue> getVariables() {
+        return null;
+    }
+
+    @Override
     public String getDisplayValue() {
         return null;
     }

@@ -9,6 +9,20 @@ public abstract class DBEntity implements IDBEntity {
     protected DBValue<Integer> entityID;
     protected Database db;
 
+//    database accessibility parameters
+    protected boolean deletable = false;
+    protected boolean editable = false;
+
+    public DBEntity makeDeletable() {
+        this.deletable = true;
+        return this;
+    }
+
+    public DBEntity makeEditable() {
+        this.editable = true;
+        return this;
+    }
+
     public Integer getEntityID() {
         return entityID.getValue();
     }

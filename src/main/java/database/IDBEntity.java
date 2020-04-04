@@ -14,6 +14,11 @@ public interface IDBEntity {
      * @return string variable of all fields of entity
      */
     String getVariables(boolean set);
+
+    /**
+     * @return variables as list of dbvalues
+     */
+    List<DBValue> getVariables();
     /**
      * @return get column titles and types for query
      * @param initialization if it's true than column should be returned for table initialization else just names

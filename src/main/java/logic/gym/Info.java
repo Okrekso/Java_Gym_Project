@@ -26,6 +26,7 @@ public class Info extends DBEntity {
 
     public Info(int infoID, Date date, String event) {
         super("Infos", new DBValue("infoID", infoID, JDBCType.INTEGER), new GymDB());
+        this.makeDeletable();
         this.date = new DBValue<>("date", new SimpleDateFormat("YYYY-MM-dd").format(date), JDBCType.DATE);
         this.event = new DBValue<>("event", event, JDBCType.NVARCHAR).addSize(255);
     }
@@ -48,7 +49,12 @@ public class Info extends DBEntity {
 
     @Override
     public String getColumns(boolean initialization, boolean withID) {
-        return  super.getColumns(Arrays.asList(entityID, date,event), initialization, withID);
+        return super.getColumns(Arrays.asList(entityID, date, event), initialization, withID);
+    }
+
+    @Override
+    public List<DBValue> getVariables() {
+        return Arrays.asList(entityID, date, event);
     }
 
     @Override
