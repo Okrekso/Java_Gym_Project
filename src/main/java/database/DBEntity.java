@@ -12,6 +12,7 @@ public abstract class DBEntity implements IDBEntity {
 //    database accessibility parameters
     protected boolean deletable = false;
     protected boolean editable = false;
+    protected boolean addable = false;
 
     public DBEntity makeDeletable() {
         this.deletable = true;
@@ -20,6 +21,11 @@ public abstract class DBEntity implements IDBEntity {
 
     public DBEntity makeEditable() {
         this.editable = true;
+        return this;
+    }
+
+    public DBEntity makeAddable() {
+        this.addable = true;
         return this;
     }
 
