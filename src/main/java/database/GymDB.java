@@ -46,14 +46,15 @@ public class GymDB extends Database {
     /**
      * @return all possible entities exists in database
      */
+    @Override
     public List<DBEntity> getDBentities() {
         return Arrays.asList(
-                new Info(0, new Date(), "DB Creation"),
-                new Gym(0,"", ""),
-                new GymSection(0, 0, "", "", 0),
-                new Subscription(0, 0, 1, "", ""),
-                new Member(0, "", "", new Date()),
-                new Visit(0, new Date(), 0, 0)
+                new Info(-1, new Date(), "DB Creation"),
+                new Gym(-1,"", ""),
+                new GymSection(-1, 0, "", "", 0),
+                new Subscription(-1, 0, 1, "", ""),
+                new Member(-1, "", "", new Date()),
+                new Visit(-1, new Date(), 0, 0)
         );
     }
 

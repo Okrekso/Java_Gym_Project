@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class Database {
     protected String connectionURL;
@@ -91,6 +92,13 @@ public abstract class Database {
     public Connection getConnection() throws SQLException {
         return DriverManager.getConnection(connectionURL, user, password);
     }
+
+    public DBEntity getEmptyEntity(Class classType) {
+        return this.getDBentities().stream().filter(dbEntity -> dbEntity.getClass() == classType)
+                .collect(Collectors.toList()).get(0);
+    }
+
+    public abstract List<DBEntity>getDBentities();
 
     /**
      * @param entity element which'll be added to a table
