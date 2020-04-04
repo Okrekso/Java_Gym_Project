@@ -1,7 +1,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page import="database.DBEntity" %>
 <%@ page import="java.util.List" %>
-<%@ page import="java.util.ArrayList" %><%--
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="database.GymDB" %><%--
   Created by IntelliJ IDEA.
   User: semik
   Date: 03.04.2020
@@ -13,6 +14,7 @@
 <head>
     <%
         List<DBEntity> entities = (ArrayList)request.getAttribute("entities");
+        DBEntity templateEntity = (DBEntity)request.getAttribute("templateEntity");
         String tableID = entities == null ? "Empty" : entities.get(0).getTableID();
     %>
     <title><%= tableID %> List</title>
@@ -31,15 +33,42 @@
         td{
             text-align: center;
         }
+
+        #top-buttons-bar {
+            display: flex;
+            flex-direction: row;
+            margin-bottom: 10px;
+            border-top: 1px solid white;
+            align-self: stretch;
+        }
+        #top-buttons-bar > button{
+            flex:1;
+            border:none;
+            outline: none;
+            background: #3540ff;
+            color:white;
+            font-size: 1.2em;
+            padding: 10px;
+        }
+        #top-buttons-bar > button:hover {
+            background: #3a6be6;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
     <header><%= tableID %> list</header>
+    <c:if test="${templateEntity.getDatabase().isDBcreated()}">
+        <form id="top-buttons-bar" action="/add-entity">
+            <c:if test="${templateEntity.isAddable()}">
+                <button type="submit" name="entity" value="<%=tableID%>">add ➕</button>
+            </c:if>
+        </form>
+    </c:if>
     <c:if test="${entities!=null}">
     <table>
         <tr>
             <c:forEach var="entitiy" items="${entities}">
-<%--                <c:out value="${entitiy.getVariables()}"--%>
                 <c:forEach var="dbValue" items="${entitiy.getVariables()}">
                     <th><c:out value="${dbValue.getTitle()}"></c:out></th>
                 </c:forEach>

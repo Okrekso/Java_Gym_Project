@@ -27,9 +27,10 @@ public class GymDB extends Database {
     }
 
     public String getTableCreationQuery(DBEntity entity) {
-        return "CREATE TABLE "+entity.tableID+"("+entity.getColumns(true, true)+")";
+        return "CREATE TABLE "+entity.getTableID()+"("+entity.getColumns(true, true)+")";
     }
 
+    @Override
     public boolean isDBcreated() {
         return executeQuery("SELECT * FROM "+new Info(0, new Date(), "").getTableID()) != null;
     }

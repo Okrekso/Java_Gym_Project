@@ -24,8 +24,11 @@ public class getEntityListServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String entity = (String)request.getParameter("entity");
         GymDB db = new GymDB();
+
         List<DBEntity> findDBEntities = db.getDBentities().stream()
-                .filter(dbEntity -> dbEntity.getTableID().toLowerCase().equals(entity.toLowerCase())).collect(Collectors.toList());
+                .filter(dbEntity -> dbEntity.getTableID().toLowerCase().equals(entity.toLowerCase()))
+                .collect(Collectors.toList());
+
         DBEntity dbEntity = findDBEntities.get(0);
         List<IDBEntity> dbEntities = null;
         try {
@@ -34,6 +37,7 @@ public class getEntityListServlet extends HttpServlet {
             request.setAttribute("error", "unable to get");
         }
         request.setAttribute("entities", dbEntities);
+        request.setAttribute("templateEntity", dbEntity);
         request.getRequestDispatcher("/getEntityList.jsp").forward(request, response);
     }
 }

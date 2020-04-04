@@ -98,6 +98,8 @@ public abstract class Database {
                 .collect(Collectors.toList()).get(0);
     }
 
+    public abstract boolean isDBcreated();
+
     public abstract List<DBEntity>getDBentities();
 
     /**

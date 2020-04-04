@@ -14,17 +14,29 @@ public abstract class DBEntity implements IDBEntity {
     protected boolean editable = false;
     protected boolean addable = false;
 
-    public DBEntity makeDeletable() {
+    protected DBEntity makeDeletable() {
         this.deletable = true;
         return this;
     }
 
-    public DBEntity makeEditable() {
+    public boolean isAddable() {
+        return addable;
+    }
+
+    public boolean isDeletable() {
+        return deletable;
+    }
+
+    public boolean isEditable() {
+        return editable;
+    }
+
+    protected DBEntity makeEditable() {
         this.editable = true;
         return this;
     }
 
-    public DBEntity makeAddable() {
+    protected DBEntity makeAddable() {
         this.addable = true;
         return this;
     }
@@ -35,6 +47,10 @@ public abstract class DBEntity implements IDBEntity {
 
     public String getTableID() {
         return tableID;
+    }
+
+    public Database getDatabase() {
+        return db;
     }
 
     protected String getColumns(List<DBValue> variables, boolean initialization, boolean withID) {
