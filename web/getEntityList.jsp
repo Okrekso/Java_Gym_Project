@@ -64,7 +64,8 @@
     <script>
         function addParameter(name, value) {
             var urlParam = new URLSearchParams(window.location.search);
-            urlParam.append(name, value);
+            if(!urlParam.get(name))
+                urlParam.append(name, value);
             return window.location.pathname + '?' + urlParam;
         }
     </script>
