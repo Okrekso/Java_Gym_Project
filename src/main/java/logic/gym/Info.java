@@ -27,6 +27,7 @@ public class Info extends DBEntity {
     public Info(int infoID, Date date, String event) {
         super("Infos", new DBValue("infoID", infoID, JDBCType.INTEGER), new GymDB());
         this.makeDeletable();
+        this.makeAddable();
         this.date = new DBValue<>("date", new SimpleDateFormat("YYYY-MM-dd").format(date), JDBCType.DATE);
         this.event = new DBValue<>("event", event, JDBCType.NVARCHAR).addSize(255);
     }

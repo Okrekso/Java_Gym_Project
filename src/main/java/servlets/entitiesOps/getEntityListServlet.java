@@ -36,6 +36,11 @@ public class getEntityListServlet extends HttpServlet {
         } catch (SQLException e) {
             request.setAttribute("error", "unable to get");
         }
+        if(dbEntities!=null && request.getParameter("selected")!=null)
+            request.setAttribute("selected", dbEntities.stream()
+                    .filter(idbEntity -> idbEntity.getEntityID() == Integer.parseInt(request.getParameter("selected")))
+                    .collect(Collectors.toList()).get(0)
+            );
         request.setAttribute("entities", dbEntities);
         request.setAttribute("templateEntity", dbEntity);
         request.getRequestDispatcher("/getEntityList.jsp").forward(request, response);

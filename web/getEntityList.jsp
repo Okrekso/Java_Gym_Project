@@ -15,6 +15,7 @@
     <%
         List<DBEntity> entities = (ArrayList)request.getAttribute("entities");
         DBEntity templateEntity = (DBEntity)request.getAttribute("templateEntity");
+        DBEntity selected = (DBEntity) request.getAttribute("selected");
         String tableID = entities == null ? "Empty" : entities.get(0).getTableID();
     %>
     <title><%= tableID %> List</title>
@@ -32,6 +33,11 @@
         }
         td{
             text-align: center;
+        }
+
+        .selected {
+            background: #2680ff;
+            color:white;
         }
 
         #top-buttons-bar {
@@ -55,6 +61,13 @@
             cursor: pointer;
         }
     </style>
+    <script>
+        function addParameter(name, value) {
+            var urlParam = new URLSearchParams(window.location.search);
+            urlParam.append(name, value);
+            return window.location.pathname + '?' + urlParam;
+        }
+    </script>
 </head>
 <body>
     <header><%= tableID %> list</header>
@@ -62,6 +75,14 @@
         <form id="top-buttons-bar" action="/add-entity">
             <c:if test="${templateEntity.isAddable()}">
                 <button type="submit" name="entity" value="<%=tableID%>">add ➕</button>
+            </c:if>
+            <c:if test="${selected!=null}">
+                <c:if test="${selected.isDeletable()}">
+                    <button type="submit" name="entity" value="<%=tableID%>">delete ➖</button>
+                </c:if>
+                <c:if test="${selected.isEditable()}">
+                    <button type="submit" name="entity" value="<%=tableID%>">edit ✍</button>
+                </c:if>
             </c:if>
         </form>
     </c:if>
@@ -75,10 +96,11 @@
             </c:forEach>
         </tr>
         <c:forEach var="entity" items="${entities}">
-            <tr>
+            <tr
+                    class="<c:if test="${selected!=null && entity.equals(selected)}">selected</c:if>"
+                    onclick="window.location.replace(addParameter('selected', '${entity.getEntityID()}'))">
                 <c:forEach var="dbValue" items="${entity.getVariables()}">
                     <td><c:out value="${dbValue.getValue()}"/></td>
-<%--                    <%=entities.get(0).getVariables().get(0).getValue()%>--%>
                 </c:forEach>
             </tr>
         </c:forEach>

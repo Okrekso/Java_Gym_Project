@@ -9,6 +9,8 @@ public interface IDBEntity {
     boolean delete();
     boolean update();
 
+    Integer getEntityID();
+
     /**
      * @param set if true returned variables will be in format Param1='param1' instead of 'param1'
      * @return string variable of all fields of entity
