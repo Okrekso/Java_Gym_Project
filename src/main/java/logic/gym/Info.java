@@ -33,11 +33,6 @@ public class Info extends DBEntity {
     }
 
     @Override
-    public boolean delete() {
-        return this.getDatabase().deleteFromTable(this.getTableID(), this.getEntityID());
-    }
-
-    @Override
     public boolean update() {
         return new GymDB().updateTable("Info", getVariables(true));
     }

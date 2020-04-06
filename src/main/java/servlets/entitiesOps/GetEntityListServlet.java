@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @WebServlet(name = "geEntityListServlet")
-public class getEntityListServlet extends HttpServlet {
+public class GetEntityListServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     }
@@ -39,6 +39,6 @@ public class getEntityListServlet extends HttpServlet {
             );
         request.setAttribute("entities", dbEntities);
         request.setAttribute("templateEntity", dbEntity);
-        request.getRequestDispatcher("/getEntityList.jsp").forward(request, response);
+        request.getRequestDispatcher("/GetEntityList.jsp").forward(request, response);
     }
 }

@@ -6,11 +6,17 @@ import java.util.List;
 
 public interface IDBEntity {
 //    List<IDBEntity> getEntities() throws SQLException;
-    boolean delete();
+    default boolean delete() {
+        return this.getDatabase().deleteFromTable(this.getTableID(), this.getEntityID());
+    }
+
+    Database getDatabase();
+
     boolean update();
 
     Integer getEntityIDValue();
     DBValue getEntityID();
+    String getTableID();
 
     /**
      * @param set if true returned variables will be in format Param1='param1' instead of 'param1'

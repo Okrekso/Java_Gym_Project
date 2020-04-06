@@ -68,10 +68,6 @@ public class Member extends DBEntity implements IVisitor, ISubscriptable {
         return visits;
     }
 
-    @Override
-    public boolean delete() {
-        return false;
-    }
 
     @Override
     public boolean update() {

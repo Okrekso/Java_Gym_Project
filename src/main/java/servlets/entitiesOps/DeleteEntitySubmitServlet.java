@@ -34,7 +34,7 @@ public class DeleteEntitySubmitServlet extends HttpServlet {
 
         } catch (SQLException e) {
             request.setAttribute("success", false);
-            request.getRequestDispatcher("/deleteEntitySubmit.jsp").forward(request, response);
+            request.getRequestDispatcher("/DeleteEntitySubmit.jsp").forward(request, response);
             return;
 
         }
@@ -44,6 +44,6 @@ public class DeleteEntitySubmitServlet extends HttpServlet {
         else
             request.setAttribute("success", false);
 
-        request.getRequestDispatcher("/deleteEntitySubmit.jsp").forward(request, response);
+        request.getRequestDispatcher("/DeleteEntitySubmit.jsp").forward(request, response);
     }
 }

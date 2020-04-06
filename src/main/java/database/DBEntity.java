@@ -46,14 +46,17 @@ public abstract class DBEntity implements IDBEntity {
         return entityID.getValue();
     }
 
-    public DBValue getEntityID() {
-        return entityID;
-    }
-
+    @Override
     public String getTableID() {
         return tableID;
     }
 
+    public DBValue getEntityID() {
+        return entityID;
+    }
+
+
+    @Override
     public Database getDatabase() {
         return db;
     }

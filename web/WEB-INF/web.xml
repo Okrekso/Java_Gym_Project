@@ -51,7 +51,7 @@
 <!--    get entities-->
     <servlet>
         <servlet-name>getEntityList</servlet-name>
-        <servlet-class>servlets.entitiesOps.getEntityListServlet</servlet-class>
+        <servlet-class>servlets.entitiesOps.GetEntityListServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>getEntityList</servlet-name>
@@ -66,5 +66,22 @@
         <servlet-name>deleteEntitySubmit</servlet-name>
         <url-pattern>/delete-entity</url-pattern>
     </servlet-mapping>
-
+<!--    add entity-->
+    <servlet>
+        <servlet-name>addEntity</servlet-name>
+        <jsp-file>/AddEntity.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>addEntity</servlet-name>
+        <url-pattern>/add-entity</url-pattern>
+    </servlet-mapping>
+<!--    add entity submit-->
+    <servlet>
+        <servlet-name>addEntitySubmit</servlet-name>
+        <servlet-class>servlets.entitiesOps.AddEntitySubmitServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>addEntitySubmit</servlet-name>
+        <url-pattern>/add-entity/submit</url-pattern>
+    </servlet-mapping>
 </web-app>

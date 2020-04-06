@@ -15,6 +15,7 @@
     <%
         List<DBEntity> entities = (ArrayList)request.getAttribute("entities");
         DBEntity templateEntity = (DBEntity)request.getAttribute("templateEntity");
+        request.setAttribute("templateEntity", templateEntity);
         DBEntity selected = (DBEntity) request.getAttribute("selected");
         String tableID = entities == null || entities.size()==0 ? "Empty" : entities.get(0).getTableID();
     %>
@@ -75,8 +76,12 @@
     <c:if test="${templateEntity.getDatabase().isDBcreated()}">
         <div id="top-buttons-bar">
             <c:if test="${templateEntity.isAddable()}">
-                <button type="submit" name="entity" value="<%=tableID%>">add ➕</button>
+                <button type="submit" name="entity" value="<%=tableID%>"
+                        onclick="window.location
+                                .replace('/add-entity?entity=<%=tableID%>')"
+                >add ➕</button>
             </c:if>
+
             <c:if test="${selected!=null}">
                 <c:if test="${selected.isDeletable()}">
                     <button type="submit" name="entity" value="<%=tableID%>"
@@ -84,6 +89,7 @@
                             .replace('/delete-entity?entity=<%=tableID%>&entityID=<%=selected.getEntityIDValue()%>')"
                     >delete ➖</button>
                 </c:if>
+
                 <c:if test="${selected.isEditable()}">
                     <button type="submit" name="entity" value="<%=tableID%>">edit ✍</button>
                 </c:if>
