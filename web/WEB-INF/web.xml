@@ -57,5 +57,14 @@
         <servlet-name>getEntityList</servlet-name>
         <url-pattern>/get-entities</url-pattern>
     </servlet-mapping>
+<!--    delete entity-->
+    <servlet>
+        <servlet-name>deleteEntitySubmit</servlet-name>
+        <servlet-class>servlets.entitiesOps.DeleteEntitySubmitServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>deleteEntitySubmit</servlet-name>
+        <url-pattern>/delete-entity</url-pattern>
+    </servlet-mapping>
 
 </web-app>

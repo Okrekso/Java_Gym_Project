@@ -9,7 +9,8 @@ public interface IDBEntity {
     boolean delete();
     boolean update();
 
-    Integer getEntityID();
+    Integer getEntityIDValue();
+    DBValue getEntityID();
 
     /**
      * @param set if true returned variables will be in format Param1='param1' instead of 'param1'

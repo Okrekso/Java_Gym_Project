@@ -22,14 +22,10 @@ public class getEntityListServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String entity = (String)request.getParameter("entity");
+        String tableID = (String)request.getParameter("entity");
         GymDB db = new GymDB();
 
-        List<DBEntity> findDBEntities = db.getDBentities().stream()
-                .filter(dbEntity -> dbEntity.getTableID().toLowerCase().equals(entity.toLowerCase()))
-                .collect(Collectors.toList());
-
-        DBEntity dbEntity = findDBEntities.get(0);
+        DBEntity dbEntity = db.getEmptyEntity(tableID);
         List<IDBEntity> dbEntities = null;
         try {
             dbEntities = db.getFromEntityTable(dbEntity);
@@ -38,7 +34,7 @@ public class getEntityListServlet extends HttpServlet {
         }
         if(dbEntities!=null && request.getParameter("selected")!=null)
             request.setAttribute("selected", dbEntities.stream()
-                    .filter(idbEntity -> idbEntity.getEntityID() == Integer.parseInt(request.getParameter("selected")))
+                    .filter(idbEntity -> idbEntity.getEntityIDValue() == Integer.parseInt(request.getParameter("selected")))
                     .collect(Collectors.toList()).get(0)
             );
         request.setAttribute("entities", dbEntities);

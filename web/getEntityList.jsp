@@ -16,7 +16,7 @@
         List<DBEntity> entities = (ArrayList)request.getAttribute("entities");
         DBEntity templateEntity = (DBEntity)request.getAttribute("templateEntity");
         DBEntity selected = (DBEntity) request.getAttribute("selected");
-        String tableID = entities == null ? "Empty" : entities.get(0).getTableID();
+        String tableID = entities == null || entities.size()==0 ? "Empty" : entities.get(0).getTableID();
     %>
     <title><%= tableID %> List</title>
     <style>
@@ -62,30 +62,33 @@
         }
     </style>
     <script>
-        function addParameter(name, value) {
-            var urlParam = new URLSearchParams(window.location.search);
+        function addParameter(name, value, url, params) {
+            var urlParam = new URLSearchParams(params);
             if(!urlParam.get(name))
                 urlParam.append(name, value);
-            return window.location.pathname + '?' + urlParam;
+            return url + '?' + urlParam;
         }
     </script>
 </head>
 <body>
     <header><%= tableID %> list</header>
     <c:if test="${templateEntity.getDatabase().isDBcreated()}">
-        <form id="top-buttons-bar" action="/add-entity">
+        <div id="top-buttons-bar">
             <c:if test="${templateEntity.isAddable()}">
                 <button type="submit" name="entity" value="<%=tableID%>">add ➕</button>
             </c:if>
             <c:if test="${selected!=null}">
                 <c:if test="${selected.isDeletable()}">
-                    <button type="submit" name="entity" value="<%=tableID%>">delete ➖</button>
+                    <button type="submit" name="entity" value="<%=tableID%>"
+                    onclick="window.location
+                            .replace('/delete-entity?entity=<%=tableID%>&entityID=<%=selected.getEntityIDValue()%>')"
+                    >delete ➖</button>
                 </c:if>
                 <c:if test="${selected.isEditable()}">
                     <button type="submit" name="entity" value="<%=tableID%>">edit ✍</button>
                 </c:if>
             </c:if>
-        </form>
+        </div>
     </c:if>
     <c:if test="${entities!=null}">
     <table>
@@ -99,7 +102,8 @@
         <c:forEach var="entity" items="${entities}">
             <tr
                     class="<c:if test="${selected!=null && entity.equals(selected)}">selected</c:if>"
-                    onclick="window.location.replace(addParameter('selected', '${entity.getEntityID()}'))">
+                    onclick="window.location.replace(addParameter('selected', '${entity.getEntityIDValue()}',
+                             window.location.pathname, window.location.search))">
                 <c:forEach var="dbValue" items="${entity.getVariables()}">
                     <td><c:out value="${dbValue.getValue()}"/></td>
                 </c:forEach>

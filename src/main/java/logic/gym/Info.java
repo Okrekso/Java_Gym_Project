@@ -34,7 +34,7 @@ public class Info extends DBEntity {
 
     @Override
     public boolean delete() {
-        return false;
+        return this.getDatabase().deleteFromTable(this.getTableID(), this.getEntityID());
     }
 
     @Override

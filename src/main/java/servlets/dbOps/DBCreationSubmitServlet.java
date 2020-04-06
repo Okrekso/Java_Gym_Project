@@ -1,6 +1,8 @@
 package servlets.dbOps;
 
+import database.DBEntity;
 import database.GymDB;
+import logic.gym.Info;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

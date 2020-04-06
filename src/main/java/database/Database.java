@@ -39,7 +39,7 @@ public abstract class Database {
      * @param query query to execute on database
      * @return is query execution was successful, returns ResultSet
      */
-    public boolean execute(String query) {
+    public boolean executeUpdate(String query) {
         if(!isConnected()) return false;
         try {
             Connection con = this.getConnection();
@@ -65,7 +65,7 @@ public abstract class Database {
     }
 
     protected boolean insertIntoTable(String tableID, String dataTemplate, String data) {
-        return execute(String.format("INSERT INTO %s(%s) VALUES(%s)", tableID, dataTemplate, data));
+        return executeUpdate(String.format("INSERT INTO %s(%s) VALUES(%s)", tableID, dataTemplate, data));
     }
 
     public List<IDBEntity> getFromEntityTable(DBEntity entity, String condition) throws SQLException {
@@ -82,7 +82,11 @@ public abstract class Database {
         return res==null;
     }
     public boolean updateTable(String tableID, String setVariables) {
-        return execute(String.format("UPDATE %s SET %s", tableID, setVariables));
+        return executeUpdate(String.format("UPDATE %s SET %s", tableID, setVariables));
+    }
+
+    public boolean deleteFromTable(String tableID, DBValue idValue) {
+        return executeUpdate(String.format("DELETE FROM %s WHERE %s=%s", tableID, idValue.getTitle(), idValue.getValue()));
     }
 
     /**
@@ -95,6 +99,14 @@ public abstract class Database {
 
     public DBEntity getEmptyEntity(Class classType) {
         return this.getDBentities().stream().filter(dbEntity -> dbEntity.getClass() == classType)
+                .collect(Collectors.toList()).get(0);
+    }
+
+    public DBEntity getEmptyEntity(String tableID) {
+        List<DBEntity> list = this.getDBentities();
+        return this.getDBentities()
+                .stream()
+                .filter(dbEntity-> dbEntity.getTableID().toLowerCase().equals(tableID.toLowerCase()))
                 .collect(Collectors.toList()).get(0);
     }
 
