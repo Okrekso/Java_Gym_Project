@@ -10,10 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -26,13 +23,10 @@ public class Info extends DBEntity {
 
     public Info(int infoID, Date date, String event) {
         super("Infos", new DBValue("infoID", infoID, JDBCType.INTEGER), new GymDB());
+        this.makeDeletable();
+        this.makeAddable();
         this.date = new DBValue<>("date", new SimpleDateFormat("YYYY-MM-dd").format(date), JDBCType.DATE);
         this.event = new DBValue<>("event", event, JDBCType.NVARCHAR).addSize(255);
-    }
-
-    @Override
-    public boolean delete() {
-        return false;
     }
 
     @Override
@@ -48,12 +42,18 @@ public class Info extends DBEntity {
 
     @Override
     public String getColumns(boolean initialization, boolean withID) {
-        return  super.getColumns(Arrays.asList(entityID, date,event), initialization, withID);
+        return super.getColumns(Arrays.asList(entityID, date, event), initialization, withID);
+    }
+
+    @Override
+    public List<DBValue> getVariables() {
+        return Arrays.asList(date, event);
     }
 
     @Override
     public String getDisplayValue() {
-        return this.event.getValue();
+        return Arrays.asList(this.event.getValue(), date.getValue())
+                .stream().collect(Collectors.joining(", "));
     }
 
     @Override

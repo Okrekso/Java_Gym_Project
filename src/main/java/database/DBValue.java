@@ -5,16 +5,16 @@ import java.sql.ResultSet;
 
 public class DBValue<T> {
     private String title;
-    T value;
-    T defaultValue;
-    JDBCType type;
-    int size = 0;
+    private T value;
+    private T defaultValue;
+    private JDBCType type;
+    private int size = 0;
 
-    boolean isPrimary = false;
-    boolean isNotNull = false;
-    boolean isAutoIncrement = false;
+    private boolean isPrimary = false;
+    private boolean isNotNull = false;
+    private  boolean isAutoIncrement = false;
 
-    String foreignKey;
+    private  String foreignKey;
 
     public DBValue(String title, T value, JDBCType type) {
         this.title = title;

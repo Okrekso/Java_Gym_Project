@@ -1,9 +1,6 @@
 package logic.gym;
 
-import database.DBValue;
-import database.DBEntity;
-import database.GymDB;
-import database.IDBEntity;
+import database.*;
 
 import java.sql.JDBCType;
 import java.sql.ResultSet;
@@ -44,11 +41,6 @@ public class Gym extends DBEntity {
     }
 
     @Override
-    public boolean delete() {
-        return false;
-    }
-
-    @Override
     public boolean update() {
         return false;
     }
@@ -63,6 +55,11 @@ public class Gym extends DBEntity {
     public String getColumns(boolean initialization, boolean withID) {
 
         return  super.getColumns(Arrays.asList(entityID, title,address), initialization, withID);
+    }
+
+    @Override
+    public List<DBValue> getVariables() {
+        return null;
     }
 
     @Override

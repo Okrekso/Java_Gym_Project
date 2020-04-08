@@ -50,11 +50,6 @@ public class Subscription extends DBEntity {
     }
 
     @Override
-    public boolean delete() {
-        return false;
-    }
-
-    @Override
     public boolean update() {
         return false;
     }
@@ -73,6 +68,11 @@ public class Subscription extends DBEntity {
                 description,
                 price,
                 duration), initialization, withID);
+    }
+
+    @Override
+    public List<DBValue> getVariables() {
+        return null;
     }
 
     @Override

@@ -22,11 +22,6 @@ public class Trainer extends DBEntity {
     }
 
     @Override
-    public boolean delete() {
-        return false;
-    }
-
-    @Override
     public boolean update() {
         return false;
     }
@@ -43,6 +38,11 @@ public class Trainer extends DBEntity {
                 name,
                 surname,
                 birthday), initialization, withID);
+    }
+
+    @Override
+    public List<DBValue> getVariables() {
+        return null;
     }
 
     @Override

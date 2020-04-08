@@ -36,11 +36,6 @@ public class Visit extends DBEntity {
     }
 
     @Override
-    public boolean delete() {
-        return false;
-    }
-
-    @Override
     public boolean update() {
         return false;
     }
@@ -58,6 +53,11 @@ public class Visit extends DBEntity {
                 visitDate,
                 price,
                 gymID), initialization, withID);
+    }
+
+    @Override
+    public List<DBValue> getVariables() {
+        return null;
     }
 
     @Override

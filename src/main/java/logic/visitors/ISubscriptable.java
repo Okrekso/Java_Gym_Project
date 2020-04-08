@@ -1,5 +1,6 @@
 package logic.visitors;
 
+import database.IDBEntity;
 import logic.gym.Subscription;
 
 public interface ISubscriptable {

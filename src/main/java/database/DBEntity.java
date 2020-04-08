@@ -1,7 +1,12 @@
 package database;
 
+import logic.gym.Info;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public abstract class DBEntity implements IDBEntity {
@@ -9,12 +14,56 @@ public abstract class DBEntity implements IDBEntity {
     protected DBValue<Integer> entityID;
     protected Database db;
 
-    public Integer getEntityID() {
+//    database accessibility parameters
+    protected boolean deletable = false;
+    protected boolean editable = false;
+    protected boolean addable = false;
+
+    protected DBEntity makeDeletable() {
+        this.deletable = true;
+        return this;
+    }
+
+    public boolean isAddable() {
+        return addable;
+    }
+
+    public boolean isDeletable() {
+        return deletable;
+    }
+
+    public boolean isEditable() {
+        return editable;
+    }
+
+    protected DBEntity makeEditable() {
+        this.editable = true;
+        return this;
+    }
+
+    protected DBEntity makeAddable() {
+        this.addable = true;
+        return this;
+    }
+
+    @Override
+    public Integer getEntityIDValue() {
         return entityID.getValue();
     }
 
+    @Override
     public String getTableID() {
         return tableID;
+    }
+
+    public DBValue getEntityID() {
+        return entityID;
+    }
+
+
+    @Override
+    public Database getDatabase() {
+        return db;
     }
 
     protected String getColumns(List<DBValue> variables, boolean initialization, boolean withID) {

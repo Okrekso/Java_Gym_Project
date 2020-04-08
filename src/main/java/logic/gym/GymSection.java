@@ -41,11 +41,6 @@ public class GymSection extends DBEntity {
     }
 
     @Override
-    public boolean delete() {
-        return false;
-    }
-
-    @Override
     public boolean update() {
         return false;
     }
@@ -61,6 +56,11 @@ public class GymSection extends DBEntity {
 
         return  super.getColumns(Arrays.asList(entityID,
                 title, description, maxPeopleCapacity, gymID), initialization, withID);
+    }
+
+    @Override
+    public List<DBValue> getVariables() {
+        return null;
     }
 
     @Override
