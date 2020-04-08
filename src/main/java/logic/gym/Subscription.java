@@ -28,7 +28,6 @@ public class Subscription extends DBEntity {
         this.description = new DBValue<>("description", description, JDBCType.NVARCHAR).addSize(255);
     }
 
-
     public String getDescription() {
         return description.getValue();
     }
@@ -55,34 +54,8 @@ public class Subscription extends DBEntity {
     }
 
     @Override
-    public String getVariables(boolean set) {
-        List<DBValue>vars = Arrays.asList(title, description, price, duration);
-        return vars.stream().map((val)->set ? val.forSet() : val.inQuotes()).collect(Collectors.joining(", "));
-    }
-
-    @Override
-    public String getColumns(boolean initialization, boolean withID) {
-
-        return  super.getColumns(Arrays.asList(entityID,
-                title,
-                description,
-                price,
-                duration), initialization, withID);
-    }
-
-    @Override
     public List<DBValue> getVariables() {
-        return null;
-    }
-
-    @Override
-    public String getDisplayValue() {
-        return null;
-    }
-
-    @Override
-    public List<IDBEntity> getListFromResultSet(ResultSet resultSet) {
-        return null;
+        return Arrays.asList(price, duration, title, description);
     }
 }
 

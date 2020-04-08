@@ -40,33 +40,9 @@ public class Visit extends DBEntity {
         return false;
     }
 
-
-    @Override
-    public String getVariables(boolean set) {
-        List<DBValue>vars = Arrays.asList(visitDate, price, gymID);
-        return vars.stream().map((val)->set ? val.forSet() : val.inQuotes()).collect(Collectors.joining(", "));
-    }
-
-    @Override
-    public String getColumns(boolean initialization, boolean withID) {
-        return super.getColumns(Arrays.asList( entityID,
-                visitDate,
-                price,
-                gymID), initialization, withID);
-    }
-
     @Override
     public List<DBValue> getVariables() {
-        return null;
+        return Arrays.asList(visitDate, price, gymID);
     }
 
-    @Override
-    public String getDisplayValue() {
-        return null;
-    }
-
-    @Override
-    public List<IDBEntity> getListFromResultSet(ResultSet resultSet) {
-        return null;
-    }
 }

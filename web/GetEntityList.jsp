@@ -1,10 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page import="database.DBEntity" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
-<%@ page import="database.GymDB" %>
-<%@ page import="database.IDBEntity" %>
-<%@ page import="database.DBValue" %><%--
+<%@ page import="database.*" %><%--
   Created by IntelliJ IDEA.
   User: semik
   Date: 03.04.2020
@@ -16,12 +13,12 @@
 <head>
     <%
         List<IDBEntity> entities = (ArrayList)request.getAttribute("entities");
-        List<DBValue> values = entities.get(0).getVariablesWithID();
         request.setAttribute("entities", entities);
         DBEntity templateEntity = (DBEntity)request.getAttribute("templateEntity");
-        request.setAttribute("templateEntity", templateEntity);
+        IDBEntityFactory entityFactory = (IDBEntityFactory)request.getAttribute("entityFactory");
+        request.setAttribute("entityFactory", entityFactory);
         DBEntity selected = (DBEntity) request.getAttribute("selected");
-        String tableID = entities == null || entities.size()==0 ? "Empty" : entities.get(0).getTableID();
+        String tableID = templateEntity.getTableID();
     %>
     <title><%= tableID %> List</title>
     <style>
@@ -103,7 +100,7 @@
     <c:if test="${entities!=null}">
     <table>
         <tr>
-                <c:forEach var="dbValue" items="${entities.get(0).getVariablesWithID()}">
+                <c:forEach var="dbValue" items="${entityFactory.create().getVariablesWithID()}">
                     <th><c:out value="${dbValue.getTitle()}"></c:out></th>
                 </c:forEach>
         </tr>

@@ -37,7 +37,7 @@
         <h2>Database Entities</h2>
         <% if (new GymDB().isDBcreated()) { %>
         <form action="/get-entities" method="get" style="display: flex; flex-direction: column;">
-            <button class="big-a" >Gyms</button>
+            <button class="big-a" name="entity" value="gyms" type="submit">Gyms</button>
             <button class="big-a" name="entity" value="infos" type="submit">Info's</button>
         </form>
         <% } else { %>

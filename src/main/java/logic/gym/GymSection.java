@@ -46,30 +46,7 @@ public class GymSection extends DBEntity {
     }
 
     @Override
-    public String getVariables(boolean set) {
-        List<DBValue>vars = Arrays.asList(title, description, maxPeopleCapacity, gymID);
-        return vars.stream().map((val)->set ? val.forSet() : val.inQuotes()).collect(Collectors.joining(", "));
-    }
-
-    @Override
-    public String getColumns(boolean initialization, boolean withID) {
-
-        return  super.getColumns(Arrays.asList(entityID,
-                title, description, maxPeopleCapacity, gymID), initialization, withID);
-    }
-
-    @Override
     public List<DBValue> getVariables() {
-        return null;
-    }
-
-    @Override
-    public String getDisplayValue() {
-        return null;
-    }
-
-    @Override
-    public List<IDBEntity> getListFromResultSet(ResultSet resultSet) {
-        return null;
+        return Arrays.asList(title, description, maxPeopleCapacity, gymID);
     }
 }

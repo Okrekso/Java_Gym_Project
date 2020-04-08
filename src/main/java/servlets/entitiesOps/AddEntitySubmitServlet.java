@@ -45,8 +45,10 @@ public class AddEntitySubmitServlet extends HttpServlet {
                             .create().getTableID().toLowerCase().equals(entityName.toLowerCase()))
                     .collect(Collectors.toList()).get(0);
 
-            db.addToTable(factory.create(mappedParams));
-            request.setAttribute("successCode", "success");
+            if(db.addToTable(factory.create(mappedParams)))
+                request.setAttribute("successCode", "success");
+            else
+                request.setAttribute("successCode", "failure");
         } catch (NullPointerException | ParseException ex) {
             if(ex.getClass() == NullPointerException.class)
                 System.out.println("error! No such entity Factory");

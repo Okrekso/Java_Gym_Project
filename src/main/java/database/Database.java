@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -68,13 +69,15 @@ public abstract class Database {
         return executeUpdate(String.format("INSERT INTO %s(%s) VALUES(%s)", tableID, dataTemplate, data));
     }
 
-    public List<IDBEntity> getFromEntityTable(DBEntity entity, String condition) throws SQLException {
+    public List<IDBEntity> getFromEntityTable(IDBEntityFactory factory, String condition) throws SQLException, ParseException {
+        DBEntity entity = factory.create();
         ResultSet set = executeQuery(String.format("SELECT * FROM %s WHERE %s", entity.getTableID(), condition));
-        return entity.getListFromResultSet(set);
+        return entity.getListFromResultSet(set, factory);
     }
-    public List<IDBEntity> getFromEntityTable(DBEntity entity) throws SQLException {
+    public List<IDBEntity> getFromEntityTable(IDBEntityFactory factory) throws SQLException, ParseException {
+        DBEntity entity = factory.create();
         ResultSet set = executeQuery(String.format("SELECT * FROM %s", entity.getTableID()));
-        return entity.getListFromResultSet(set);
+        return entity.getListFromResultSet(set, factory);
     }
 
     public boolean updateTable(String tableID, String setVariables, String condition) {

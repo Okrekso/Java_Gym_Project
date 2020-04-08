@@ -35,38 +35,7 @@ public class Info extends DBEntity {
     }
 
     @Override
-    public String getVariables(boolean set) {
-        List<DBValue>vars = Arrays.asList(date, event);
-        return vars.stream().map((val)->set ? val.forSet() : val.inQuotes()).collect(Collectors.joining(", "));
-    }
-
-    @Override
-    public String getColumns(boolean initialization, boolean withID) {
-        return super.getColumns(Arrays.asList(entityID, date, event), initialization, withID);
-    }
-
-    @Override
     public List<DBValue> getVariables() {
         return Arrays.asList(date, event);
-    }
-
-    @Override
-    public String getDisplayValue() {
-        return Arrays.asList(this.event.getValue(), date.getValue())
-                .stream().collect(Collectors.joining(", "));
-    }
-
-    @Override
-    public List<IDBEntity> getListFromResultSet(ResultSet resultSet) throws SQLException {
-            if(resultSet==null) return null;
-            List<IDBEntity> entities = new ArrayList<>();
-            boolean is = resultSet.isClosed();
-            while(resultSet.next()) {
-                Integer infoID = (Integer)resultSet.getObject(entityID.getTitle());
-                Date date = resultSet.getDate(this.date.getTitle());
-                String event = (String)resultSet.getObject(this.event.getTitle());
-                entities.add(new Info(infoID, date, event));
-            }
-            return entities;
     }
 }
