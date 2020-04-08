@@ -2,7 +2,11 @@ package database;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public interface IDBEntity {
 //    List<IDBEntity> getEntities() throws SQLException;
@@ -28,6 +32,12 @@ public interface IDBEntity {
      * @return variables as list of dbvalues
      */
     List<DBValue> getVariables();
+
+    default List<DBValue> getVariablesWithID() {
+        List<DBValue> variables = new ArrayList<>(getVariables());
+        variables.add(0, getEntityID());
+        return variables;
+    }
     /**
      * @return get column titles and types for query
      * @param initialization if it's true than column should be returned for table initialization else just names

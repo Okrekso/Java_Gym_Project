@@ -16,7 +16,7 @@ public class InfoFactory implements IDBEntityFactory {
 
     @Override
     public DBEntity create(Map<String, String> parameters) throws ParseException {
-        return new Info(-1, new SimpleDateFormat("YYYY-MM-DD").parse(parameters.get("date")),
+        return new Info(-1, new SimpleDateFormat("yyyy-MM-dd").parse(parameters.get("date")),
                 parameters.get("event"));
     }
 }

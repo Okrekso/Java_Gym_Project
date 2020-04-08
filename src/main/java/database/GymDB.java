@@ -1,11 +1,7 @@
 package database;
 
-import logic.gym.Info;
-import logic.gym.Gym;
-import logic.gym.GymSection;
-import logic.gym.Subscription;
-import logic.gym.Visit;
-import logic.visitors.Member;
+import logic.gym.*;
+import logic.visitors.MemberFactory;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -34,33 +30,31 @@ public class GymDB extends Database {
         return executeQuery("SELECT * FROM "+new Info(0, new Date(), "").getTableID()) != null;
     }
 
-    public boolean buildNewGymDB() {
-        GymDB db = new GymDB();
-        List<String> queries = getDBentities().stream().map(dbEntity -> db.getTableCreationQuery(dbEntity)).collect(Collectors.toList());
+    @Override
+    public List<IDBEntityFactory> getDBEntityFactories() {
+        return Arrays.asList(
+                new InfoFactory(),
+                new GymFactory(),
+                new GymSectionFactory(),
+                new SubscriptionFactory(),
+                new MemberFactory(),
+                new VisitFactory()
+        );
+    }
+
+    public boolean build() {
+        List<String> queries = getDBEntities().stream()
+                .map(dbEntity -> getTableCreationQuery(dbEntity))
+                .collect(Collectors.toList());
         for(String query : queries) {
-            db.executeUpdate(query);
+            executeUpdate(query);
         }
         return addToTable(new Info(0, new Date(), "DB creation"));
     }
 
-    /**
-     * @return all possible entities exists in database
-     */
-    @Override
-    public List<DBEntity> getDBentities() {
-        return Arrays.asList(
-                new Info(-1, new Date(), "DB Creation"),
-                new Gym(-1,"", ""),
-                new GymSection(-1, 0, "", "", 0),
-                new Subscription(-1, 0, 1, "", ""),
-                new Member(-1, "", "", new Date()),
-                new Visit(-1, new Date(), 0, 0)
-        );
-    }
-
     public boolean dropCurrentDB() {
         GymDB db = new GymDB();
-        List<String> tableIDs = getDBentities().stream().map(dbEntity -> dbEntity.tableID).collect(Collectors.toList());
+        List<String> tableIDs = getDBEntities().stream().map(dbEntity -> dbEntity.tableID).collect(Collectors.toList());
         for(String tableID : tableIDs) {
             if(!db.executeUpdate("DROP TABLE " + tableID))
                 return false;

@@ -10,10 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -50,7 +47,7 @@ public class Info extends DBEntity {
 
     @Override
     public List<DBValue> getVariables() {
-        return Arrays.asList(entityID, date, event);
+        return Arrays.asList(date, event);
     }
 
     @Override

@@ -1,7 +1,12 @@
 package database;
 
+import logic.gym.Info;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public abstract class DBEntity implements IDBEntity {

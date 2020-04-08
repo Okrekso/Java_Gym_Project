@@ -17,6 +17,6 @@ public class MemberFactory implements IDBEntityFactory {
     @Override
     public DBEntity create(Map<String, String> parameters) throws ParseException {
         return new Member(-1, parameters.get("name"), parameters.get("surname"),
-                new SimpleDateFormat("YYYY-MM-DD").parse(parameters.get("birthday")));
+                new SimpleDateFormat("yyyy-MM-dd").parse(parameters.get("birthday")));
     }
 }

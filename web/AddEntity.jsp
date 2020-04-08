@@ -43,11 +43,23 @@
         List<DBValue> values = templateEntity.getVariables();
         request.setAttribute("values", values);
     %>
-    <form id="add-entity-form" method="post" action="/new-entity/submit">
-        <c:forEach var="dbValue" items="${values}">
-            <input placeholder="${dbValue.getTitle()}" name="${dbValue.getTitle()}"/>
-        </c:forEach>
-        <button type="submit">Add</button>
-    </form>
+    <c:if test="${requestScope.get('successCode')==null}">
+        <form id="add-entity-form" method="post" action="/add-entity/submit">
+            <c:forEach var="dbValue" items="${values}">
+                <input value="${dbValue.getValue()}" placeholder="${dbValue.getTitle()}" name="${dbValue.getTitle()}"/>
+            </c:forEach>
+            <input type="hidden" value="<%=request.getParameter("entity")%>" name="entity" />
+            <button type="submit">Add</button>
+        </form>
+    </c:if>
+    <c:if test="${requestScope.get('successCode')!=null}">
+        <c:if test="${requestScope.get('successCode')=='success'}">
+            <h2>Added entity successfully!</h2>
+        </c:if>
+        <c:if test="${requestScope.get('successCode')!='success'}">
+            <h2>Error occupied while adding entity...</h2>
+        </c:if>
+        <a href="/">go back</a>
+    </c:if>
 </body>
 </html>

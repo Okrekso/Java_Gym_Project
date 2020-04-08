@@ -98,13 +98,13 @@ public abstract class Database {
     }
 
     public DBEntity getEmptyEntity(Class classType) {
-        return this.getDBentities().stream().filter(dbEntity -> dbEntity.getClass() == classType)
+        return this.getDBEntities().stream().filter(dbEntity -> dbEntity.getClass() == classType)
                 .collect(Collectors.toList()).get(0);
     }
 
     public DBEntity getEmptyEntity(String tableID) {
-        List<DBEntity> list = this.getDBentities();
-        return this.getDBentities()
+        List<DBEntity> list = this.getDBEntities();
+        return this.getDBEntities()
                 .stream()
                 .filter(dbEntity-> dbEntity.getTableID().toLowerCase().equals(tableID.toLowerCase()))
                 .collect(Collectors.toList()).get(0);
@@ -112,7 +112,15 @@ public abstract class Database {
 
     public abstract boolean isDBcreated();
 
-    public abstract List<DBEntity>getDBentities();
+    public final List<DBEntity> getDBEntities() {
+        return this.getDBEntityFactories().stream()
+                .map(idbEntityFactory -> idbEntityFactory.create())
+                .collect(Collectors.toList());
+    }
+
+    public abstract List<IDBEntityFactory> getDBEntityFactories();
+
+    public abstract boolean build();
 
     /**
      * @param entity element which'll be added to a table

@@ -2,7 +2,9 @@
 <%@ page import="database.DBEntity" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
-<%@ page import="database.GymDB" %><%--
+<%@ page import="database.GymDB" %>
+<%@ page import="database.IDBEntity" %>
+<%@ page import="database.DBValue" %><%--
   Created by IntelliJ IDEA.
   User: semik
   Date: 03.04.2020
@@ -13,7 +15,9 @@
 <html>
 <head>
     <%
-        List<DBEntity> entities = (ArrayList)request.getAttribute("entities");
+        List<IDBEntity> entities = (ArrayList)request.getAttribute("entities");
+        List<DBValue> values = entities.get(0).getVariablesWithID();
+        request.setAttribute("entities", entities);
         DBEntity templateEntity = (DBEntity)request.getAttribute("templateEntity");
         request.setAttribute("templateEntity", templateEntity);
         DBEntity selected = (DBEntity) request.getAttribute("selected");
@@ -99,18 +103,16 @@
     <c:if test="${entities!=null}">
     <table>
         <tr>
-            <c:forEach var="entitiy" items="${entities}">
-                <c:forEach var="dbValue" items="${entitiy.getVariables()}">
+                <c:forEach var="dbValue" items="${entities.get(0).getVariablesWithID()}">
                     <th><c:out value="${dbValue.getTitle()}"></c:out></th>
                 </c:forEach>
-            </c:forEach>
         </tr>
         <c:forEach var="entity" items="${entities}">
             <tr
                     class="<c:if test="${selected!=null && entity.equals(selected)}">selected</c:if>"
                     onclick="window.location.replace(addParameter('selected', '${entity.getEntityIDValue()}',
                              window.location.pathname, window.location.search))">
-                <c:forEach var="dbValue" items="${entity.getVariables()}">
+                <c:forEach var="dbValue" items="${entity.getVariablesWithID()}">
                     <td><c:out value="${dbValue.getValue()}"/></td>
                 </c:forEach>
             </tr>
