@@ -32,7 +32,7 @@ public class Gym extends DBEntity {
                     new GymSectionFactory(),
                     String.format("gymID=%s", this.getEntityID().getValue())
             );
-            if(gymSectionEntities != null)
+            if(gymSectionEntities != null && gymSectionEntities.size()>0)
                 this.gymSections = gymSectionEntities.stream()
                         .map(dbEntity -> (GymSection)dbEntity)
                         .collect(Collectors.toList());
@@ -42,7 +42,7 @@ public class Gym extends DBEntity {
                     new GymSectionFactory(),
                     String.format("gymID=%s", this.getEntityID().getValue())
             );
-            if(subscriptionEntities != null)
+            if(subscriptionEntities != null && subscriptionEntities.size()>0)
                 this.subscriptions = subscriptionEntities.stream()
                         .map(dbEntity -> (Subscription)dbEntity)
                         .collect(Collectors.toList());

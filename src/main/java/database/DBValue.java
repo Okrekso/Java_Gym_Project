@@ -14,7 +14,6 @@ public class DBValue<T> {
     private boolean isNotNull = false;
     private  boolean isAutoIncrement = false;
 
-    private  String foreignKey;
     private IDBEntityFactory foreignKeyFactory;
 
     public DBValue(String title, T value, JDBCType type) {
@@ -47,8 +46,8 @@ public class DBValue<T> {
     }
 
     public DBValue addForeignKey(IDBEntityFactory factory) {
-        this.foreignKey = String.format("%s(%s)", factory.create().getTableID(),
-                factory.create().getEntityID().getTitle());
+//        this.foreignKey = String.format("%s(%s)", factory.create().getTableID(),
+//                factory.create().getEntityID().getTitle());
         this.foreignKeyFactory = factory;
         return this;
     }
@@ -89,8 +88,10 @@ public class DBValue<T> {
         if(this.defaultValue!=null)
             result += String.format(" DEFAULT '%s'", defaultValue);
 
-        if(this.foreignKey!=null)
-            result += String.format(", FOREIGN KEY (%s) REFERENCES %s", title, foreignKey);
+        if(this.foreignKeyFactory!=null)
+            result += String.format(", FOREIGN KEY (%s) REFERENCES %s(%s)",
+                    title, foreignKeyFactory.create().getTableID(),
+                    foreignKeyFactory.create().getEntityID().getTitle());
 
         return result;
     }
