@@ -4,6 +4,8 @@ import database.*;
 
 import java.sql.JDBCType;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -22,6 +24,21 @@ public class Gym extends DBEntity {
         this.makeAddable();
         this.makeDeletable();
         this.makeEditable();
+        GymDB db = new GymDB();
+
+        try {
+            List<DBEntity> dbEntities = db.getFromEntityTable(
+                    new GymSectionFactory(),
+                    String.format("gymID=%s", this.getEntityID().getValue())
+            );
+            if(dbEntities != null)
+                this.gymSections = dbEntities.stream()
+                        .map(dbEntity -> (GymSection)dbEntity)
+                        .collect(Collectors.toList());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         this.title = new DBValue<>("title", title, JDBCType.NVARCHAR).addSize(255).addNotNull();
         this.address = new DBValue<>("address", address, JDBCType.NVARCHAR).addSize(255).addNotNull();
     }

@@ -81,9 +81,9 @@ public abstract class DBEntity implements IDBEntity {
         return db;
     }
 
-    protected List<IDBEntity> getListFromResultSet(ResultSet resultSet, IDBEntityFactory factory) throws SQLException, ParseException {
+    protected List<DBEntity> getListFromResultSet(ResultSet resultSet, IDBEntityFactory factory) throws SQLException, ParseException {
         if(resultSet==null) return null;
-        List<IDBEntity> entities = new ArrayList<>();
+        List<DBEntity> entities = new ArrayList<>();
         while(resultSet.next()) {
             factory.create().getVariablesWithID().get(0).getTitle();
             Map<String, String> readyValues = factory.create().getVariablesWithID().stream()

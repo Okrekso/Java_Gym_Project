@@ -25,6 +25,10 @@ public class GymSection extends DBEntity {
         this.maxPeopleCapacity = new DBValue<>("maxPeopleCapacity", maxPeopleCapacity, JDBCType.INTEGER)
                 .addNotNull().addDefaultValue(1);
         this.gymID = new DBValue<>("gymID", gymID, JDBCType.INTEGER).addForeignKey("Gyms", "gymID");
+
+        this.makeAddable();
+        this.makeDeletable();
+        this.makeEditable();
     }
 
 

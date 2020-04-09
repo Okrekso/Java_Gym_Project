@@ -15,4 +15,5 @@ public interface IDBEntityFactory {
 
     DBEntity create();
     DBEntity create(Map<String, String> parameters) throws ParseException;
+//    DBEntity create(DBEntity entity);
 }

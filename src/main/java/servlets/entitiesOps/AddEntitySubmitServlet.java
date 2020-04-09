@@ -43,11 +43,8 @@ public class AddEntitySubmitServlet extends HttpServlet {
                 request.setAttribute("successCode", "success");
             else
                 request.setAttribute("successCode", "error");
-        } catch (NullPointerException | ParseException ex) {
-            if(ex.getClass() == NullPointerException.class)
-                System.out.println("error! No such entity Factory");
-            if(ex.getClass() == ParseException.class)
-                System.out.println("invalid date format!");
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
             request.setAttribute("successCode", "error");
         }
         finally {

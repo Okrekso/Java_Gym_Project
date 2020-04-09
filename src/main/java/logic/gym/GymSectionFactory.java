@@ -9,7 +9,7 @@ import java.util.Map;
 public class GymSectionFactory implements IDBEntityFactory {
     @Override
     public DBEntity create() {
-        return new GymSection(-1, -1, "", "", 0);
+        return new GymSection(-1, -1, "", "", 1);
     }
 
     @Override

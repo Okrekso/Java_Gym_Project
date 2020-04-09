@@ -28,7 +28,7 @@ public class GetEntityListServlet extends HttpServlet {
         GymDB db = new GymDB();
 
         IDBEntityFactory entityFactory = db.getFactoryByTableName(tableID);
-        List<IDBEntity> dbEntities = null;
+        List<DBEntity> dbEntities = null;
         try {
             dbEntities = db.getFromEntityTable(entityFactory);
         } catch (SQLException | ParseException e) {
