@@ -84,4 +84,22 @@
         <servlet-name>addEntitySubmit</servlet-name>
         <url-pattern>/add-entity/submit</url-pattern>
     </servlet-mapping>
+<!--    edit entity-->
+    <servlet>
+        <servlet-name>editEntity</servlet-name>
+        <servlet-class>servlets.entitiesOps.EditEntityServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>editEntity</servlet-name>
+        <url-pattern>/edit-entity</url-pattern>
+    </servlet-mapping>
+<!--    edit entity submit-->
+    <servlet>
+        <servlet-name>editEntitySubmit</servlet-name>
+        <servlet-class>servlets.entitiesOps.EditEntitySubmitServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>editEntitySubmit</servlet-name>
+        <url-pattern>/edit-entity/submit</url-pattern>
+    </servlet-mapping>
 </web-app>

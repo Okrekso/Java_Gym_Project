@@ -92,7 +92,10 @@
                 </c:if>
 
                 <c:if test="${selected.isEditable()}">
-                    <button type="submit" name="entity" value="<%=tableID%>">edit ✍</button>
+                    <button type="submit" name="entity" value="<%=tableID%>"
+                            onclick="window.location
+                                    .replace('/edit-entity?entity=<%=tableID%>&id=<%=selected.getEntityID().getValue()%>')"
+                    >edit ✍</button>
                 </c:if>
             </c:if>
         </div>

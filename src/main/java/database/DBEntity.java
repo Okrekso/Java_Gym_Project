@@ -49,7 +49,7 @@ public abstract class DBEntity implements IDBEntity {
         return this;
     }
 
-    final boolean update() {
+    public final boolean update() {
         return getDatabase().updateTable(getTableID(), getVariables(true));
     };
 

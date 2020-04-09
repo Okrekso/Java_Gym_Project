@@ -80,6 +80,10 @@ public abstract class Database {
         return entity.getListFromResultSet(set, factory);
     }
 
+    public List<IDBEntity> getFromEntityTableById(IDBEntityFactory factory, Integer id) throws SQLException, ParseException {
+        return getFromEntityTable(factory, String.format("%s=%s", factory.create().getEntityID().getTitle(), id));
+    }
+
     public boolean updateTable(String tableID, String setVariables, String condition) {
         ResultSet res = executeQuery(String.format("UPDATE %s SET %s WHERE %s", tableID, setVariables, condition));
         return res==null;

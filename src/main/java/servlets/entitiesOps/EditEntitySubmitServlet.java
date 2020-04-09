@@ -11,13 +11,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Parameter;
 import java.text.ParseException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@WebServlet(name = "AddEntitySubmitServlet")
-public class AddEntitySubmitServlet extends HttpServlet {
+@WebServlet(name = "EditEntitySubmitServlet")
+public class EditEntitySubmitServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         GymDB db = new GymDB();
         String entityName = request.getParameter("entity");
@@ -38,9 +37,10 @@ public class AddEntitySubmitServlet extends HttpServlet {
                     .filter(idbEntityFactory -> idbEntityFactory
                             .create().getTableID().toLowerCase().equals(entityName.toLowerCase()))
                     .collect(Collectors.toList()).get(0);
+            mappedParams.put(factory.create().getEntityID().getTitle(), request.getParameter("id"));
 
-            if(db.addToTable(factory.create(mappedParams)))
-                request.setAttribute("successCode", "success");
+            if(factory.create(mappedParams).update())
+                request.setAttribute("successCode", "e-success");
             else
                 request.setAttribute("successCode", "error");
         } catch (NullPointerException | ParseException ex) {
