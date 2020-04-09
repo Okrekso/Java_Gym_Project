@@ -30,11 +30,6 @@ public class Info extends DBEntity {
     }
 
     @Override
-    public boolean update() {
-        return new GymDB().updateTable("Info", getVariables(true));
-    }
-
-    @Override
     public List<DBValue> getVariables() {
         return Arrays.asList(date, event);
     }

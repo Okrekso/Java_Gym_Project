@@ -18,8 +18,6 @@ public interface IDBEntity {
 
     Database getDatabase();
 
-    boolean update();
-
     Integer getEntityIDValue();
     DBValue getEntityID();
     String getTableID();

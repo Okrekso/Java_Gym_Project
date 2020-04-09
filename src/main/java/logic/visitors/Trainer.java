@@ -22,11 +22,6 @@ public class Trainer extends DBEntity {
     }
 
     @Override
-    public boolean update() {
-        return false;
-    }
-
-    @Override
     public List<DBValue> getVariables() {
         return Arrays.asList(name, surname, birthday);
     }

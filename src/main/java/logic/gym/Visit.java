@@ -36,11 +36,6 @@ public class Visit extends DBEntity {
     }
 
     @Override
-    public boolean update() {
-        return false;
-    }
-
-    @Override
     public List<DBValue> getVariables() {
         return Arrays.asList(visitDate, price, gymID);
     }

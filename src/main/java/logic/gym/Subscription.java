@@ -49,11 +49,6 @@ public class Subscription extends DBEntity {
     }
 
     @Override
-    public boolean update() {
-        return false;
-    }
-
-    @Override
     public List<DBValue> getVariables() {
         return Arrays.asList(price, duration, title, description);
     }

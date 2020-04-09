@@ -70,11 +70,6 @@ public class Member extends DBEntity implements IVisitor, ISubscriptable {
 
 
     @Override
-    public boolean update() {
-        return false;
-    }
-
-    @Override
     public List<DBValue> getVariables() {
         return Arrays.asList(name, surname, birthday);
     }
