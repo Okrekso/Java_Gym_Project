@@ -56,9 +56,9 @@ public abstract class DBEntity implements IDBEntity {
 
     @Override
     public String toString() {
-        return this.getVariablesWithID().stream()
+        return "#" + this.getEntityID().getValue() + ". (" + this.getVariables().stream()
                 .map(element-> element.getValue().toString())
-                .collect(Collectors.joining(", "));
+                .collect(Collectors.joining(", ")) + ")";
     }
 
     @Override

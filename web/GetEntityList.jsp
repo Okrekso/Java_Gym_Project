@@ -68,6 +68,8 @@
             var urlParam = new URLSearchParams(params);
             if(!urlParam.get(name))
                 urlParam.append(name, value);
+            else
+                urlParam.set(name, value);
             return url + '?' + urlParam;
         }
     </script>

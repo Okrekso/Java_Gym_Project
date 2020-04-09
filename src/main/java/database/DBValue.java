@@ -27,6 +27,26 @@ public class DBValue<T> {
         this.type = type;
     }
 
+    public boolean isPrimary() {
+        return isPrimary;
+    }
+
+    public boolean isAutoIncrement() {
+        return isAutoIncrement;
+    }
+
+    public boolean isNotNull() {
+        return isNotNull;
+    }
+
+    public boolean isForeignKey() {
+        return this.foreignKeyFactory != null;
+    }
+
+    public IDBEntityFactory getForeignKeyFactory() {
+        return foreignKeyFactory;
+    }
+
     public String inQuotes() {
         return DBValue.coverByQuotes(value);
     }
