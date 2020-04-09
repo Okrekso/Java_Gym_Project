@@ -27,14 +27,27 @@ public class Gym extends DBEntity {
         GymDB db = new GymDB();
 
         try {
-            List<DBEntity> dbEntities = db.getFromEntityTable(
+//            getting gymSections from it's table
+            List<DBEntity> gymSectionEntities = db.getFromEntityTable(
                     new GymSectionFactory(),
                     String.format("gymID=%s", this.getEntityID().getValue())
             );
-            if(dbEntities != null)
-                this.gymSections = dbEntities.stream()
+            if(gymSectionEntities != null)
+                this.gymSections = gymSectionEntities.stream()
                         .map(dbEntity -> (GymSection)dbEntity)
                         .collect(Collectors.toList());
+
+//            getting Subscriptions from it's table
+            List<DBEntity> subscriptionEntities = db.getFromEntityTable(
+                    new GymSectionFactory(),
+                    String.format("gymID=%s", this.getEntityID().getValue())
+            );
+            if(subscriptionEntities != null)
+                this.subscriptions = subscriptionEntities.stream()
+                        .map(dbEntity -> (Subscription)dbEntity)
+                        .collect(Collectors.toList());
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }

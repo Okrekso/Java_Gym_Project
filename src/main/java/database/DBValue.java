@@ -15,6 +15,7 @@ public class DBValue<T> {
     private  boolean isAutoIncrement = false;
 
     private  String foreignKey;
+    private IDBEntityFactory foreignKeyFactory;
 
     public DBValue(String title, T value, JDBCType type) {
         this.title = title;
@@ -45,8 +46,10 @@ public class DBValue<T> {
         return this;
     }
 
-    public DBValue addForeignKey(String tableID, String keyID) {
-        this.foreignKey = String.format("%s(%s)", tableID, keyID);
+    public DBValue addForeignKey(IDBEntityFactory factory) {
+        this.foreignKey = String.format("%s(%s)", factory.create().getTableID(),
+                factory.create().getEntityID().getTitle());
+        this.foreignKeyFactory = factory;
         return this;
     }
 
