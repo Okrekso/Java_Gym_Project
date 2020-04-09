@@ -4,6 +4,8 @@ import database.*;
 
 import java.sql.JDBCType;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -19,6 +21,24 @@ public class Gym extends DBEntity {
 
     public Gym(int gymID, String title, String address) {
         super("Gyms", new DBValue("gymID", gymID, JDBCType.INTEGER), new GymDB());
+        this.makeAddable();
+        this.makeDeletable();
+        this.makeEditable();
+        GymDB db = new GymDB();
+
+        try {
+            List<DBEntity> dbEntities = db.getFromEntityTable(
+                    new GymSectionFactory(),
+                    String.format("gymID=%s", this.getEntityID().getValue())
+            );
+            if(dbEntities != null)
+                this.gymSections = dbEntities.stream()
+                        .map(dbEntity -> (GymSection)dbEntity)
+                        .collect(Collectors.toList());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         this.title = new DBValue<>("title", title, JDBCType.NVARCHAR).addSize(255).addNotNull();
         this.address = new DBValue<>("address", address, JDBCType.NVARCHAR).addSize(255).addNotNull();
     }
@@ -41,34 +61,7 @@ public class Gym extends DBEntity {
     }
 
     @Override
-    public boolean update() {
-        return false;
-    }
-
-    @Override
-    public String getVariables(boolean set) {
-        List<DBValue>vars = Arrays.asList(title, address);
-        return vars.stream().map((val)->set ? val.forSet() : val.inQuotes()).collect(Collectors.joining(", "));
-    }
-
-    @Override
-    public String getColumns(boolean initialization, boolean withID) {
-
-        return  super.getColumns(Arrays.asList(entityID, title,address), initialization, withID);
-    }
-
-    @Override
     public List<DBValue> getVariables() {
-        return null;
-    }
-
-    @Override
-    public String getDisplayValue() {
-        return null;
-    }
-
-    @Override
-    public List<IDBEntity> getListFromResultSet(ResultSet resultSet) {
-        return null;
+        return Arrays.asList(title, address);
     }
 }

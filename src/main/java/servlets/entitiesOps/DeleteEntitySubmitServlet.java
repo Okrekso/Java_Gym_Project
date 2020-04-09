@@ -3,6 +3,7 @@ package servlets.entitiesOps;
 import database.DBEntity;
 import database.GymDB;
 import database.IDBEntity;
+import database.IDBEntityFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,14 +27,14 @@ public class DeleteEntitySubmitServlet extends HttpServlet {
         String tableID = (String)request.getParameter("entity");
         GymDB db = new GymDB();
 
-        DBEntity entity = db.getEmptyEntity(tableID);
-        List<IDBEntity> foundDBEntity = null;
+        IDBEntityFactory entity = db.getFactoryByTableName(tableID);
+        List<IDBEntity> foundDBEntity;
         try {
             foundDBEntity = db.getFromEntityTable(entity).stream()
                     .filter(idbEntity -> idbEntity.getEntityIDValue() == entityID)
                     .collect(Collectors.toList());
 
-        } catch (SQLException e) {
+        } catch (SQLException | ParseException e) {
             request.setAttribute("success", false);
             request.getRequestDispatcher("/DeleteEntitySubmit.jsp").forward(request, response);
             return;

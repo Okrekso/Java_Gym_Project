@@ -97,7 +97,7 @@ public class DBValue<T> {
     }
 
     public static String coverByQuotes(Object value) {
-        return "'" + (String)value + "'";
+        return "'" + value.toString() + "'";
     }
 
     public String getTitle() {

@@ -18,7 +18,6 @@ public class GymDB extends Database {
     @Override
     public boolean addToTable(DBEntity entity) {
         return this.insertIntoTable(entity.getTableID(), entity.getColumns(false, false), entity.getVariables(false));
-//        return this.execute("INSERT INTO " + entity.tableID + "(" + entity.getVariables(false) + ")");
     }
 
     public String getTableCreationQuery(DBEntity entity) {
@@ -40,6 +39,16 @@ public class GymDB extends Database {
                 new MemberFactory(),
                 new VisitFactory()
         );
+    }
+
+    public IDBEntityFactory getFactoryByTableName(String tableID) {
+        List<IDBEntityFactory> factories = getDBEntityFactories().stream()
+                .filter(factory -> factory.create().getTableID().toLowerCase().equals(tableID.toLowerCase()))
+                .collect(Collectors.toList());
+        if(factories.size()>0)
+            return factories.get(0);
+        else
+            return null;
     }
 
     public boolean build() {

@@ -14,6 +14,7 @@ public class GymFactory implements IDBEntityFactory {
 
     @Override
     public DBEntity create(Map<String, String> parameters) throws ParseException {
-        return new Gym(-1, parameters.get("title"), parameters.get("address"));
+        return new Gym(getId(parameters, create().getEntityID().getTitle()),
+                parameters.get("title"), parameters.get("address"));
     }
 }

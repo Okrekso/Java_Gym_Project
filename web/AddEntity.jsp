@@ -12,7 +12,17 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>New Entity of Table <%=request.getParameter("entity")%></title>
+    <%
+        GymDB db = new GymDB();
+        String mode = (String) request.getAttribute("mode");
+        Integer id = mode == "edit" ? Integer.parseInt(request.getParameter("id")) : null;
+        List<DBValue> params = (List<DBValue>) request.getAttribute("editVariables");
+        DBEntity templateEntity = db.getEmptyEntity(request.getParameter("entity"));
+        List<DBValue> values = mode == "edit" ? params : templateEntity.getVariables();
+        request.setAttribute("values", values);
+    %>
+    <title><%=mode=="edit" ? "Edit" : "New"%> Entity of Table
+        <%=request.getParameter("entity")%> <%=mode=="edit" ? String.format("of ID #%s", id) : ""%></title>
     <style>
         <%@include file="styles/global.css"%>
         #add-entity-form {
@@ -37,26 +47,23 @@
     </style>
 </head>
 <body>
-    <%
-        GymDB db = new GymDB();
-        DBEntity templateEntity = db.getEmptyEntity(request.getParameter("entity"));
-        List<DBValue> values = templateEntity.getVariables();
-        request.setAttribute("values", values);
-    %>
     <c:if test="${requestScope.get('successCode')==null}">
-        <form id="add-entity-form" method="post" action="/add-entity/submit">
+        <form id="add-entity-form" method="post" action="/<%=mode=="edit"?"edit":"add"%>-entity/submit">
             <c:forEach var="dbValue" items="${values}">
                 <input value="${dbValue.getValue()}" placeholder="${dbValue.getTitle()}" name="${dbValue.getTitle()}"/>
             </c:forEach>
             <input type="hidden" value="<%=request.getParameter("entity")%>" name="entity" />
-            <button type="submit">Add</button>
+            <button type="submit"><%=mode=="edit" ? "save Entity" : "Add Entity"%></button>
         </form>
     </c:if>
     <c:if test="${requestScope.get('successCode')!=null}">
+        <c:if test="${requestScope.get('successCode')=='e-sucess'}">
+            <h2>Edited entity successfully!</h2>
+        </c:if>
         <c:if test="${requestScope.get('successCode')=='success'}">
             <h2>Added entity successfully!</h2>
         </c:if>
-        <c:if test="${requestScope.get('successCode')!='success'}">
+        <c:if test="${requestScope.get('successCode')=='error'}">
             <h2>Error occupied while adding entity...</h2>
         </c:if>
         <a href="/">go back</a>

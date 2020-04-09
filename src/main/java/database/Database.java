@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -68,13 +69,21 @@ public abstract class Database {
         return executeUpdate(String.format("INSERT INTO %s(%s) VALUES(%s)", tableID, dataTemplate, data));
     }
 
-    public List<IDBEntity> getFromEntityTable(DBEntity entity, String condition) throws SQLException {
-        ResultSet set = executeQuery(String.format("SELECT * FROM %s WHERE %s", entity.getTableID(), condition));
-        return entity.getListFromResultSet(set);
-    }
-    public List<IDBEntity> getFromEntityTable(DBEntity entity) throws SQLException {
+
+    public List<DBEntity> getFromEntityTable(IDBEntityFactory factory) throws SQLException, ParseException {
+        DBEntity entity = factory.create();
         ResultSet set = executeQuery(String.format("SELECT * FROM %s", entity.getTableID()));
-        return entity.getListFromResultSet(set);
+        return entity.getListFromResultSet(set, factory);
+    }
+
+    public List<DBEntity> getFromEntityTable(IDBEntityFactory factory, String condition) throws SQLException, ParseException {
+        DBEntity entity = factory.create();
+        ResultSet set = executeQuery(String.format("SELECT * FROM %s WHERE %s", entity.getTableID(), condition));
+        return entity.getListFromResultSet(set, factory);
+    }
+
+    public List<DBEntity> getFromEntityTableById(IDBEntityFactory factory, Integer id) throws SQLException, ParseException {
+        return getFromEntityTable(factory, String.format("%s=%s", factory.create().getEntityID().getTitle(), id));
     }
 
     public boolean updateTable(String tableID, String setVariables, String condition) {

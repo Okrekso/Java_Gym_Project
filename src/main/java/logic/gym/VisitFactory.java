@@ -16,7 +16,8 @@ public class VisitFactory implements IDBEntityFactory {
 
     @Override
     public DBEntity create(Map<String, String> parameters) throws ParseException {
-        return new Visit(-1, new SimpleDateFormat("yyyy-MM-dd").parse(parameters.get("date")),
+        return new Visit(getId(parameters, create().getEntityID().getTitle()),
+                new SimpleDateFormat("yyyy-MM-dd").parse(parameters.get("date")),
                 Integer.parseInt(parameters.get("price")), Integer.parseInt(parameters.get("gymID")));
     }
 }

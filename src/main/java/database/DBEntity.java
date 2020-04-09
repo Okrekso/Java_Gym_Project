@@ -1,12 +1,9 @@
 package database;
 
-import logic.gym.Info;
-
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public abstract class DBEntity implements IDBEntity {
@@ -18,6 +15,12 @@ public abstract class DBEntity implements IDBEntity {
     protected boolean deletable = false;
     protected boolean editable = false;
     protected boolean addable = false;
+
+    protected DBEntity(String tableID, DBValue entityID, Database db) {
+        this.tableID = tableID;
+        this.entityID = entityID.addPrimaryKey().addAutoIncrement();
+        this.db = db;
+    }
 
     protected DBEntity makeDeletable() {
         this.deletable = true;
@@ -46,6 +49,18 @@ public abstract class DBEntity implements IDBEntity {
         return this;
     }
 
+    public final boolean update() {
+        return getDatabase().updateTable(getTableID(), getVariables(true));
+    };
+
+
+    @Override
+    public String toString() {
+        return this.getVariablesWithID().stream()
+                .map(element-> element.getValue().toString())
+                .collect(Collectors.joining(", "));
+    }
+
     @Override
     public Integer getEntityIDValue() {
         return entityID.getValue();
@@ -66,17 +81,22 @@ public abstract class DBEntity implements IDBEntity {
         return db;
     }
 
-    protected String getColumns(List<DBValue> variables, boolean initialization, boolean withID) {
-        return variables
-                .stream()
-                .skip(withID ? 0 : 1)
-                .map(dbValue -> initialization ? dbValue.build() : dbValue.getTitle())
-                .collect(Collectors.joining(", "));
-    }
-
-    protected DBEntity(String tableID, DBValue entityID, Database db) {
-        this.tableID = tableID;
-        this.entityID = entityID.addPrimaryKey().addAutoIncrement();
-        this.db = db;
+    protected List<DBEntity> getListFromResultSet(ResultSet resultSet, IDBEntityFactory factory) throws SQLException, ParseException {
+        if(resultSet==null) return null;
+        List<DBEntity> entities = new ArrayList<>();
+        while(resultSet.next()) {
+            factory.create().getVariablesWithID().get(0).getTitle();
+            Map<String, String> readyValues = factory.create().getVariablesWithID().stream()
+                    .map(dbValue -> dbValue.getTitle())
+                    .collect(Collectors.toMap(title->title, title-> {
+                        try {
+                            return resultSet.getString(title);
+                        } catch (SQLException e) {
+                            return null;
+                        }
+                    }));
+            entities.add(factory.create(readyValues));
+        }
+        return entities;
     }
 }

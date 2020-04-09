@@ -9,12 +9,13 @@ import java.util.Map;
 public class GymSectionFactory implements IDBEntityFactory {
     @Override
     public DBEntity create() {
-        return new GymSection(-1, -1, "", "", 0);
+        return new GymSection(-1, -1, "", "", 1);
     }
 
     @Override
     public DBEntity create(Map<String, String> parameters) throws ParseException {
-        return new GymSection(-1, Integer.parseInt(parameters.get("gymID")),
+        return new GymSection(getId(parameters, create().getEntityID().getTitle()),
+                Integer.parseInt(parameters.get("gymID")),
                 parameters.get("title"), parameters.get("description"),
                 Integer.parseInt(parameters.get("maxPeopleCapacity")));
     }
