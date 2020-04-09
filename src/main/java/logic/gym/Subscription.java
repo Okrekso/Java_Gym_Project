@@ -21,7 +21,7 @@ public class Subscription extends DBEntity {
     private List<GymSection> accessSections;
 
     public Subscription(int subscriptionID, float price, Integer duration, String title, String description) {
-        super("subscriptions", new DBValue("subscriptionID", subscriptionID, JDBCType.INTEGER), new GymDB());
+        super("Subscriptions", new DBValue("subscriptionID", subscriptionID, JDBCType.INTEGER), new GymDB());
         this.price = new DBValue<>("price", price, JDBCType.FLOAT).addNotNull().addDefaultValue(1);
         this.duration = new DBValue<>("duration", duration, JDBCType.INTEGER).addNotNull().addDefaultValue(7);
         this.title = new DBValue<>("title", title, JDBCType.NVARCHAR).addSize(255).addNotNull();

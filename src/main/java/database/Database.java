@@ -106,11 +106,6 @@ public abstract class Database {
         return DriverManager.getConnection(connectionURL, user, password);
     }
 
-    public DBEntity getEmptyEntity(Class classType) {
-        return this.getDBEntities().stream().filter(dbEntity -> dbEntity.getClass() == classType)
-                .collect(Collectors.toList()).get(0);
-    }
-
     public DBEntity getEmptyEntity(String tableID) {
         List<DBEntity> list = this.getDBEntities();
         return this.getDBEntities()

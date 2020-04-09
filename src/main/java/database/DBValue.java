@@ -46,8 +46,6 @@ public class DBValue<T> {
     }
 
     public DBValue addForeignKey(IDBEntityFactory factory) {
-//        this.foreignKey = String.format("%s(%s)", factory.create().getTableID(),
-//                factory.create().getEntityID().getTitle());
         this.foreignKeyFactory = factory;
         return this;
     }
