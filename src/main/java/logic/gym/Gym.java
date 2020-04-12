@@ -66,11 +66,6 @@ public class Gym extends DBEntity implements IDBContainRelative {
     }
 
     @Override
-    public List<IDBEntityFactory> getRelativeFactories() {
-        return Arrays.asList(new SubscriptionFactory(), new GymSectionFactory());
-    }
-
-    @Override
     public Map<String, List<? extends DBEntity>> getRelativeValues() {
         Map<String, List<? extends DBEntity>> relativeMap = new HashMap<>();
         relativeMap.put(new GymSectionFactory().create().getTableID(), getGymSections());

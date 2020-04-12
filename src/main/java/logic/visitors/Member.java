@@ -1,17 +1,17 @@
 package logic.visitors;
 
 import database.*;
+import logic.gym.GymSectionFactory;
 import logic.gym.Subscription;
+import logic.gym.SubscriptionFactory;
 import logic.gym.Visit;
 
 import java.sql.JDBCType;
 import java.sql.ResultSet;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
-public class Member extends DBEntity implements IVisitor, ISubscriptable {
+public class Member extends DBEntity implements IVisitor, ISubscriptable, IDBContainRelative {
     private DBValue<String> name;
     private DBValue<String> surname;
     private DBValue<Date> birthday;
@@ -73,5 +73,12 @@ public class Member extends DBEntity implements IVisitor, ISubscriptable {
     @Override
     public List<DBValue> getVariables() {
         return Arrays.asList(name, surname, birthday);
+    }
+
+    @Override
+    public Map<String, List<? extends DBEntity>> getRelativeValues() {
+        Map<String, List<? extends DBEntity>> relativeMap = new HashMap<>();
+        relativeMap.put(new GymSectionFactory().create().getTableID(), getVisits());
+        return relativeMap;
     }
 }
