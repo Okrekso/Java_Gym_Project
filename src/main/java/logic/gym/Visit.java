@@ -1,9 +1,6 @@
 package logic.gym;
 
-import database.DBValue;
-import database.DBEntity;
-import database.GymDB;
-import database.IDBEntity;
+import database.*;
 
 import java.sql.Array;
 import java.sql.JDBCType;
@@ -25,6 +22,9 @@ public class Visit extends DBEntity {
         this.visitDate = new DBValue<>("visitDate", visitDate, JDBCType.DATE);
         this.price = new DBValue<>("price", price, JDBCType.FLOAT);
         this.gymID = new DBValue<>("gymID", gymID, JDBCType.INTEGER);
+
+        this.makeAddable();
+        this.makeDeletable();
     }
 
     public Date getVisitDate() {
@@ -36,37 +36,13 @@ public class Visit extends DBEntity {
     }
 
     @Override
-    public boolean delete() {
-        return false;
+    public IDBEntityFactory getFactory() {
+        return new VisitFactory();
     }
 
     @Override
-    public boolean update() {
-        return false;
+    public List<DBValue> getVariables() {
+        return Arrays.asList(visitDate, price, gymID);
     }
 
-
-    @Override
-    public String getVariables(boolean set) {
-        List<DBValue>vars = Arrays.asList(visitDate, price, gymID);
-        return vars.stream().map((val)->set ? val.forSet() : val.inQuotes()).collect(Collectors.joining(", "));
-    }
-
-    @Override
-    public String getColumns(boolean initialization, boolean withID) {
-        return super.getColumns(Arrays.asList( entityID,
-                visitDate,
-                price,
-                gymID), initialization, withID);
-    }
-
-    @Override
-    public String getDisplayValue() {
-        return null;
-    }
-
-    @Override
-    public List<IDBEntity> getListFromResultSet(ResultSet resultSet) {
-        return null;
-    }
 }

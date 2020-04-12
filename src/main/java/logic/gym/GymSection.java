@@ -1,9 +1,6 @@
 package logic.gym;
 
-import database.DBValue;
-import database.DBEntity;
-import database.GymDB;
-import database.IDBEntity;
+import database.*;
 
 import java.sql.JDBCType;
 import java.sql.ResultSet;
@@ -24,7 +21,11 @@ public class GymSection extends DBEntity {
         this.description = new DBValue<>("description", description, JDBCType.NVARCHAR).addSize(255);
         this.maxPeopleCapacity = new DBValue<>("maxPeopleCapacity", maxPeopleCapacity, JDBCType.INTEGER)
                 .addNotNull().addDefaultValue(1);
-        this.gymID = new DBValue<>("gymID", gymID, JDBCType.INTEGER).addForeignKey("Gyms", "gymID");
+        this.gymID = new DBValue<>("gymID", gymID, JDBCType.INTEGER).addForeignKey(new GymFactory());
+
+        this.makeAddable();
+        this.makeDeletable();
+        this.makeEditable();
     }
 
 
@@ -41,35 +42,12 @@ public class GymSection extends DBEntity {
     }
 
     @Override
-    public boolean delete() {
-        return false;
+    public IDBEntityFactory getFactory() {
+        return new GymSectionFactory();
     }
 
     @Override
-    public boolean update() {
-        return false;
-    }
-
-    @Override
-    public String getVariables(boolean set) {
-        List<DBValue>vars = Arrays.asList(title, description, maxPeopleCapacity, gymID);
-        return vars.stream().map((val)->set ? val.forSet() : val.inQuotes()).collect(Collectors.joining(", "));
-    }
-
-    @Override
-    public String getColumns(boolean initialization, boolean withID) {
-
-        return  super.getColumns(Arrays.asList(entityID,
-                title, description, maxPeopleCapacity, gymID), initialization, withID);
-    }
-
-    @Override
-    public String getDisplayValue() {
-        return null;
-    }
-
-    @Override
-    public List<IDBEntity> getListFromResultSet(ResultSet resultSet) {
-        return null;
+    public List<DBValue> getVariables() {
+        return Arrays.asList(title, description, maxPeopleCapacity, gymID);
     }
 }

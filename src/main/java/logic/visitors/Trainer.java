@@ -22,36 +22,12 @@ public class Trainer extends DBEntity {
     }
 
     @Override
-    public boolean delete() {
-        return false;
+    public IDBEntityFactory getFactory() {
+        return new TrainerFactory();
     }
 
     @Override
-    public boolean update() {
-        return false;
-    }
-
-    @Override
-    public String getVariables(boolean set) {
-        List<DBValue> vars = Arrays.asList(name, surname, birthday);
-        return vars.stream().map((val)->set ? val.forSet() : val.inQuotes()).collect(Collectors.joining(", "));
-    }
-
-    @Override
-    public String getColumns(boolean initialization, boolean withID) {
-        return super.getColumns(Arrays.asList( entityID,
-                name,
-                surname,
-                birthday), initialization, withID);
-    }
-
-    @Override
-    public String getDisplayValue() {
-        return null;
-    }
-
-    @Override
-    public List<IDBEntity> getListFromResultSet(ResultSet resultSet) {
-        return null;
+    public List<DBValue> getVariables() {
+        return Arrays.asList(name, surname, birthday);
     }
 }

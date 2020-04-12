@@ -1,19 +1,18 @@
 package logic.gym;
 
-import database.DBValue;
-import database.DBEntity;
-import database.GymDB;
-import database.IDBEntity;
+import database.*;
 
+import java.sql.Array;
 import java.sql.JDBCType;
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
-public class Gym extends DBEntity {
+public class Gym extends DBEntity implements IDBContainRelative {
     private List<GymSection> gymSections;
     private List<Subscription> subscriptions;
 
@@ -22,6 +21,19 @@ public class Gym extends DBEntity {
 
     public Gym(int gymID, String title, String address) {
         super("Gyms", new DBValue("gymID", gymID, JDBCType.INTEGER), new GymDB());
+        this.makeAddable();
+        this.makeDeletable();
+        this.makeEditable();
+        GymDB db = new GymDB();
+
+        try {
+//            getting gymSections & subscriptions from it's table
+            this.gymSections = getRelativeEntityList(this.getEntityID(), new GymSectionFactory());
+            this.subscriptions = getRelativeEntityList(this.getEntityID(), new SubscriptionFactory());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         this.title = new DBValue<>("title", title, JDBCType.NVARCHAR).addSize(255).addNotNull();
         this.address = new DBValue<>("address", address, JDBCType.NVARCHAR).addSize(255).addNotNull();
     }
@@ -44,34 +56,20 @@ public class Gym extends DBEntity {
     }
 
     @Override
-    public boolean delete() {
-        return false;
+    public IDBEntityFactory getFactory() {
+        return new GymFactory();
     }
 
     @Override
-    public boolean update() {
-        return false;
+    public List<DBValue> getVariables() {
+        return Arrays.asList(title, address);
     }
 
     @Override
-    public String getVariables(boolean set) {
-        List<DBValue>vars = Arrays.asList(title, address);
-        return vars.stream().map((val)->set ? val.forSet() : val.inQuotes()).collect(Collectors.joining(", "));
-    }
-
-    @Override
-    public String getColumns(boolean initialization, boolean withID) {
-
-        return  super.getColumns(Arrays.asList(entityID, title,address), initialization, withID);
-    }
-
-    @Override
-    public String getDisplayValue() {
-        return null;
-    }
-
-    @Override
-    public List<IDBEntity> getListFromResultSet(ResultSet resultSet) {
-        return null;
+    public Map<String, List<? extends DBEntity>> getRelativeValues() {
+        Map<String, List<? extends DBEntity>> relativeMap = new HashMap<>();
+        relativeMap.put(new GymSectionFactory().create().getTableID(), getGymSections());
+        relativeMap.put(new SubscriptionFactory().create().getTableID(), getSubscriptions());
+        return relativeMap;
     }
 }

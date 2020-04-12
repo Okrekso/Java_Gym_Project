@@ -1,20 +1,17 @@
 package logic.visitors;
 
-import database.DBValue;
-import database.DBEntity;
-import database.GymDB;
-import database.IDBEntity;
+import database.*;
+import logic.gym.GymSectionFactory;
 import logic.gym.Subscription;
+import logic.gym.SubscriptionFactory;
 import logic.gym.Visit;
 
 import java.sql.JDBCType;
 import java.sql.ResultSet;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
-public class Member extends DBEntity implements IVisitor, ISubscriptable {
+public class Member extends DBEntity implements IVisitor, ISubscriptable, IDBContainRelative {
     private DBValue<String> name;
     private DBValue<String> surname;
     private DBValue<Date> birthday;
@@ -26,6 +23,10 @@ public class Member extends DBEntity implements IVisitor, ISubscriptable {
         this.name = new DBValue<>("name", name, JDBCType.NVARCHAR).addSize(255);
         this.surname = new DBValue<>("surname", surname, JDBCType.NVARCHAR).addSize(255);
         this.birthday = new DBValue<>("birthday", birthday, JDBCType.DATE);
+        this.makeAddable();
+        this.makeDeletable();
+        this.makeEditable();
+
     }
 
     @Override
@@ -58,47 +59,26 @@ public class Member extends DBEntity implements IVisitor, ISubscriptable {
         throw new RuntimeException("unimplemented function called");
     }
 
-//    @Override
-//    public Subscription getSubscription() {
-//        return null;
-//    }
-
     @Override
     public List<Visit> getVisits() {
         return visits;
     }
 
+
     @Override
-    public boolean delete() {
-        return false;
+    public IDBEntityFactory getFactory() {
+        return new MemberFactory();
     }
 
     @Override
-    public boolean update() {
-        return false;
+    public List<DBValue> getVariables() {
+        return Arrays.asList(name, surname, birthday);
     }
 
     @Override
-    public String getVariables(boolean set) {
-        List<DBValue>vars = Arrays.asList(name, surname, birthday);
-        return vars.stream().map((val)->set ? val.forSet() : val.inQuotes()).collect(Collectors.joining(", "));
-    }
-
-    @Override
-    public String getColumns(boolean initialization, boolean withID) {
-        return super.getColumns(Arrays.asList( entityID,
-                name,
-                surname,
-                birthday), initialization, withID);
-    }
-
-    @Override
-    public String getDisplayValue() {
-        return null;
-    }
-
-    @Override
-    public List<IDBEntity> getListFromResultSet(ResultSet resultSet) {
-        return null;
+    public Map<String, List<? extends DBEntity>> getRelativeValues() {
+        Map<String, List<? extends DBEntity>> relativeMap = new HashMap<>();
+        relativeMap.put(new GymSectionFactory().create().getTableID(), getVisits());
+        return relativeMap;
     }
 }

@@ -1,9 +1,6 @@
 package logic.gym;
 
-import database.DBValue;
-import database.DBEntity;
-import database.GymDB;
-import database.IDBEntity;
+import database.*;
 
 import java.sql.JDBCType;
 import java.sql.ResultSet;
@@ -21,13 +18,16 @@ public class Subscription extends DBEntity {
     private List<GymSection> accessSections;
 
     public Subscription(int subscriptionID, float price, Integer duration, String title, String description) {
-        super("subscriptions", new DBValue("subscriptionID", subscriptionID, JDBCType.INTEGER), new GymDB());
+        super("Subscriptions", new DBValue("subscriptionID", subscriptionID, JDBCType.INTEGER), new GymDB());
         this.price = new DBValue<>("price", price, JDBCType.FLOAT).addNotNull().addDefaultValue(1);
         this.duration = new DBValue<>("duration", duration, JDBCType.INTEGER).addNotNull().addDefaultValue(7);
         this.title = new DBValue<>("title", title, JDBCType.NVARCHAR).addSize(255).addNotNull();
         this.description = new DBValue<>("description", description, JDBCType.NVARCHAR).addSize(255);
-    }
 
+        this.makeAddable();
+        this.makeEditable();
+        this.makeDeletable();
+    }
 
     public String getDescription() {
         return description.getValue();
@@ -50,39 +50,13 @@ public class Subscription extends DBEntity {
     }
 
     @Override
-    public boolean delete() {
-        return false;
+    public IDBEntityFactory getFactory() {
+        return new SubscriptionFactory();
     }
 
     @Override
-    public boolean update() {
-        return false;
-    }
-
-    @Override
-    public String getVariables(boolean set) {
-        List<DBValue>vars = Arrays.asList(title, description, price, duration);
-        return vars.stream().map((val)->set ? val.forSet() : val.inQuotes()).collect(Collectors.joining(", "));
-    }
-
-    @Override
-    public String getColumns(boolean initialization, boolean withID) {
-
-        return  super.getColumns(Arrays.asList(entityID,
-                title,
-                description,
-                price,
-                duration), initialization, withID);
-    }
-
-    @Override
-    public String getDisplayValue() {
-        return null;
-    }
-
-    @Override
-    public List<IDBEntity> getListFromResultSet(ResultSet resultSet) {
-        return null;
+    public List<DBValue> getVariables() {
+        return Arrays.asList(price, duration, title, description);
     }
 }
 

@@ -14,7 +14,7 @@ import java.io.PrintWriter;
 public class DBCreationSubmitServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if(!new GymDB().isDBcreated()) {
-            new GymDB().buildNewGymDB();
+            new GymDB().build();
             request.setAttribute("message", "DB creation in progress...");
         } else {
             request.setAttribute("message", "DB already exist.");
