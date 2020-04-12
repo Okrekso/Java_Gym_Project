@@ -1,9 +1,6 @@
 package logic.visitors;
 
-import database.DBValue;
-import database.DBEntity;
-import database.GymDB;
-import database.IDBEntity;
+import database.*;
 import logic.gym.Subscription;
 import logic.gym.Visit;
 
@@ -67,6 +64,11 @@ public class Member extends DBEntity implements IVisitor, ISubscriptable {
         return visits;
     }
 
+
+    @Override
+    public IDBEntityFactory getFactory() {
+        return new MemberFactory();
+    }
 
     @Override
     public List<DBValue> getVariables() {

@@ -113,6 +113,6 @@ public abstract class DBEntity implements IDBEntity {
             return entities.stream().map(entity -> foreignKeyFactory.create().getClass().cast(entity))
                     .collect(Collectors.toList());
         }
-        return null;
+        return new ArrayList();
     }
 }

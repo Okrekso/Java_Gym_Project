@@ -1,9 +1,6 @@
 package logic.gym;
 
-import database.DBValue;
-import database.DBEntity;
-import database.GymDB;
-import database.IDBEntity;
+import database.*;
 
 import java.sql.Array;
 import java.sql.JDBCType;
@@ -36,6 +33,11 @@ public class Visit extends DBEntity {
 
     public double getPrice() {
         return price.getValue();
+    }
+
+    @Override
+    public IDBEntityFactory getFactory() {
+        return new VisitFactory();
     }
 
     @Override

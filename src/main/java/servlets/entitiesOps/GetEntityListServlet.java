@@ -1,9 +1,6 @@
 package servlets.entitiesOps;
 
-import database.DBEntity;
-import database.GymDB;
-import database.IDBEntity;
-import database.IDBEntityFactory;
+import database.*;
 import logic.gym.Info;
 
 import javax.servlet.ServletException;
@@ -39,9 +36,14 @@ public class GetEntityListServlet extends HttpServlet {
                     .filter(idbEntity -> idbEntity.getEntityIDValue() == Integer.parseInt(request.getParameter("selected")))
                     .collect(Collectors.toList()).get(0)
             );
+        try {
+            IDBContainRelative dbEntityContainRelative = (IDBContainRelative) entityFactory.create();
+            request.setAttribute("containRelativeValue", dbEntityContainRelative);
+        } catch (ClassCastException ex) {
+            request.setAttribute("containRelativeValue", null);
+        }
         request.setAttribute("entityFactory", entityFactory);
         request.setAttribute("entities", dbEntities);
-        request.setAttribute("templateEntity", entityFactory.create());
         request.getRequestDispatcher("/GetEntityList.jsp").forward(request, response);
     }
 }

@@ -22,6 +22,11 @@ public class Trainer extends DBEntity {
     }
 
     @Override
+    public IDBEntityFactory getFactory() {
+        return new TrainerFactory();
+    }
+
+    @Override
     public List<DBValue> getVariables() {
         return Arrays.asList(name, surname, birthday);
     }

@@ -1,9 +1,6 @@
 package logic.gym;
 
-import database.DBValue;
-import database.DBEntity;
-import database.GymDB;
-import database.IDBEntity;
+import database.*;
 
 import java.sql.JDBCType;
 import java.sql.ResultSet;
@@ -42,6 +39,11 @@ public class GymSection extends DBEntity {
 
     public String getTitle() {
         return title.getValue();
+    }
+
+    @Override
+    public IDBEntityFactory getFactory() {
+        return new GymSectionFactory();
     }
 
     @Override
