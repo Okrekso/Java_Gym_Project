@@ -26,6 +26,10 @@ public class Subscription extends DBEntity {
         this.duration = new DBValue<>("duration", duration, JDBCType.INTEGER).addNotNull().addDefaultValue(7);
         this.title = new DBValue<>("title", title, JDBCType.NVARCHAR).addSize(255).addNotNull();
         this.description = new DBValue<>("description", description, JDBCType.NVARCHAR).addSize(255);
+
+        this.makeAddable();
+        this.makeEditable();
+        this.makeDeletable();
     }
 
     public String getDescription() {

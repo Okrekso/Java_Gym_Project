@@ -25,6 +25,9 @@ public class Visit extends DBEntity {
         this.visitDate = new DBValue<>("visitDate", visitDate, JDBCType.DATE);
         this.price = new DBValue<>("price", price, JDBCType.FLOAT);
         this.gymID = new DBValue<>("gymID", gymID, JDBCType.INTEGER);
+
+        this.makeAddable();
+        this.makeDeletable();
     }
 
     public Date getVisitDate() {

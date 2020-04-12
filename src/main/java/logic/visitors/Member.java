@@ -26,6 +26,10 @@ public class Member extends DBEntity implements IVisitor, ISubscriptable {
         this.name = new DBValue<>("name", name, JDBCType.NVARCHAR).addSize(255);
         this.surname = new DBValue<>("surname", surname, JDBCType.NVARCHAR).addSize(255);
         this.birthday = new DBValue<>("birthday", birthday, JDBCType.DATE);
+        this.makeAddable();
+        this.makeDeletable();
+        this.makeEditable();
+
     }
 
     @Override
@@ -57,11 +61,6 @@ public class Member extends DBEntity implements IVisitor, ISubscriptable {
     public void registerExit() {
         throw new RuntimeException("unimplemented function called");
     }
-
-//    @Override
-//    public Subscription getSubscription() {
-//        return null;
-//    }
 
     @Override
     public List<Visit> getVisits() {
