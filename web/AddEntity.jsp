@@ -20,6 +20,7 @@
         DBEntity templateEntity = db.getEmptyEntity(request.getParameter("entity"));
         List<DBValue> values = mode == "edit" ? params : templateEntity.getVariables();
         request.setAttribute("values", values);
+        request.setAttribute("db", new GymDB());
     %>
     <title><%=mode=="edit" ? "Edit" : "New"%> Entity of Table
         <%=request.getParameter("entity")%> <%=mode=="edit" ? String.format("of ID #%s", id) : ""%></title>
@@ -28,12 +29,14 @@
         #add-entity-form {
             display: flex;
             flex-direction: column;
+            padding: 10px;
         }
         #add-entity-form > input {
-            margin:10px 5px;
+            margin-bottom: 10px;
         }
         #add-entity-form > button {
             padding: 10px;
+            margin-top: 20px;
             color:white;
             background: #3540ff;
         }
@@ -44,13 +47,27 @@
         #add-entity-form > button:disabled {
             background: gray;
         }
+        #add-entity-form > p {
+            color:gray;
+            margin: 0;
+        }
     </style>
 </head>
 <body>
     <c:if test="${requestScope.get('successCode')==null}">
         <form id="add-entity-form" method="post" action="/<%=mode=="edit"?"edit":"add"%>-entity/submit">
             <c:forEach var="dbValue" items="${values}">
-                <input value="${dbValue.getValue()}" placeholder="${dbValue.getTitle()}" name="${dbValue.getTitle()}"/>
+                <p>${dbValue.getTitle()}</p>
+                <c:if test="${dbValue.isForeignKey()}">
+                    <select name="${dbValue.getTitle()}">
+                        <c:forEach var="selectEntity" items="${db.getFromEntityTable(dbValue.getForeignKeyFactory())}">
+                            <option value="${selectEntity.getEntityID().getValue()}">${selectEntity.toString()}</option>
+                        </c:forEach>
+                    </select>
+                </c:if>
+                <c:if test="${!dbValue.isForeignKey()}">
+                    <input value="${dbValue.getValue()}" placeholder="${dbValue.getTitle()}" name="${dbValue.getTitle()}"/>
+                </c:if>
             </c:forEach>
             <input type="hidden" value="<%=request.getParameter("entity")%>" name="entity" />
             <button type="submit"><%=mode=="edit" ? "save Entity" : "Add Entity"%></button>

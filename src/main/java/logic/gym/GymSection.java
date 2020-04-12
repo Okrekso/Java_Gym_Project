@@ -1,9 +1,6 @@
 package logic.gym;
 
-import database.DBValue;
-import database.DBEntity;
-import database.GymDB;
-import database.IDBEntity;
+import database.*;
 
 import java.sql.JDBCType;
 import java.sql.ResultSet;
@@ -24,7 +21,7 @@ public class GymSection extends DBEntity {
         this.description = new DBValue<>("description", description, JDBCType.NVARCHAR).addSize(255);
         this.maxPeopleCapacity = new DBValue<>("maxPeopleCapacity", maxPeopleCapacity, JDBCType.INTEGER)
                 .addNotNull().addDefaultValue(1);
-        this.gymID = new DBValue<>("gymID", gymID, JDBCType.INTEGER).addForeignKey("Gyms", "gymID");
+        this.gymID = new DBValue<>("gymID", gymID, JDBCType.INTEGER).addForeignKey(new GymFactory());
 
         this.makeAddable();
         this.makeDeletable();
@@ -42,6 +39,11 @@ public class GymSection extends DBEntity {
 
     public String getTitle() {
         return title.getValue();
+    }
+
+    @Override
+    public IDBEntityFactory getFactory() {
+        return new GymSectionFactory();
     }
 
     @Override

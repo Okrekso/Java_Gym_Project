@@ -1,9 +1,6 @@
 package logic.gym;
 
-import database.DBValue;
-import database.DBEntity;
-import database.GymDB;
-import database.IDBEntity;
+import database.*;
 
 import java.sql.JDBCType;
 import java.sql.ResultSet;
@@ -27,6 +24,11 @@ public class Info extends DBEntity {
         this.makeAddable();
         this.date = new DBValue<>("date", new SimpleDateFormat("YYYY-MM-dd").format(date), JDBCType.DATE);
         this.event = new DBValue<>("event", event, JDBCType.NVARCHAR).addSize(255);
+    }
+
+    @Override
+    public IDBEntityFactory getFactory() {
+        return new InfoFactory();
     }
 
     @Override

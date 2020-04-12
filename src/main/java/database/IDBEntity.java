@@ -21,6 +21,7 @@ public interface IDBEntity {
     Integer getEntityIDValue();
     DBValue getEntityID();
     String getTableID();
+    IDBEntityFactory getFactory();
 
     default String getColumns(boolean initialization, boolean withID) {
         return getVariablesWithID()

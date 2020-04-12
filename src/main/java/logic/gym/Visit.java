@@ -1,9 +1,6 @@
 package logic.gym;
 
-import database.DBValue;
-import database.DBEntity;
-import database.GymDB;
-import database.IDBEntity;
+import database.*;
 
 import java.sql.Array;
 import java.sql.JDBCType;
@@ -25,6 +22,9 @@ public class Visit extends DBEntity {
         this.visitDate = new DBValue<>("visitDate", visitDate, JDBCType.DATE);
         this.price = new DBValue<>("price", price, JDBCType.FLOAT);
         this.gymID = new DBValue<>("gymID", gymID, JDBCType.INTEGER);
+
+        this.makeAddable();
+        this.makeDeletable();
     }
 
     public Date getVisitDate() {
@@ -33,6 +33,11 @@ public class Visit extends DBEntity {
 
     public double getPrice() {
         return price.getValue();
+    }
+
+    @Override
+    public IDBEntityFactory getFactory() {
+        return new VisitFactory();
     }
 
     @Override

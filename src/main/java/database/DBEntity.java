@@ -1,5 +1,8 @@
 package database;
 
+import logic.gym.GymSection;
+import logic.gym.GymSectionFactory;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -56,9 +59,9 @@ public abstract class DBEntity implements IDBEntity {
 
     @Override
     public String toString() {
-        return this.getVariablesWithID().stream()
+        return "#" + this.getEntityID().getValue() + ". (" + this.getVariables().stream()
                 .map(element-> element.getValue().toString())
-                .collect(Collectors.joining(", "));
+                .collect(Collectors.joining(", ")) + ")";
     }
 
     @Override
@@ -98,5 +101,18 @@ public abstract class DBEntity implements IDBEntity {
             entities.add(factory.create(readyValues));
         }
         return entities;
+    }
+
+    protected List getRelativeEntityList(DBValue foreignKeyValue, IDBEntityFactory foreignKeyFactory)
+            throws SQLException, ParseException {
+        List<DBEntity> entities = db.getFromEntityTable(
+                foreignKeyFactory,
+                String.format("%s=%s", foreignKeyValue.getTitle(), foreignKeyValue.getValue())
+        );
+        if(entities!=null && entities.size()>0) {
+            return entities.stream().map(entity -> foreignKeyFactory.create().getClass().cast(entity))
+                    .collect(Collectors.toList());
+        }
+        return new ArrayList();
     }
 }

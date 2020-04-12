@@ -2,17 +2,17 @@ package logic.gym;
 
 import database.*;
 
+import java.sql.Array;
 import java.sql.JDBCType;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
-public class Gym extends DBEntity {
+public class Gym extends DBEntity implements IDBContainRelative {
     private List<GymSection> gymSections;
     private List<Subscription> subscriptions;
 
@@ -27,14 +27,9 @@ public class Gym extends DBEntity {
         GymDB db = new GymDB();
 
         try {
-            List<DBEntity> dbEntities = db.getFromEntityTable(
-                    new GymSectionFactory(),
-                    String.format("gymID=%s", this.getEntityID().getValue())
-            );
-            if(dbEntities != null)
-                this.gymSections = dbEntities.stream()
-                        .map(dbEntity -> (GymSection)dbEntity)
-                        .collect(Collectors.toList());
+//            getting gymSections & subscriptions from it's table
+            this.gymSections = getRelativeEntityList(this.getEntityID(), new GymSectionFactory());
+            this.subscriptions = getRelativeEntityList(this.getEntityID(), new SubscriptionFactory());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -61,7 +56,20 @@ public class Gym extends DBEntity {
     }
 
     @Override
+    public IDBEntityFactory getFactory() {
+        return new GymFactory();
+    }
+
+    @Override
     public List<DBValue> getVariables() {
         return Arrays.asList(title, address);
+    }
+
+    @Override
+    public Map<String, List<? extends DBEntity>> getRelativeValues() {
+        Map<String, List<? extends DBEntity>> relativeMap = new HashMap<>();
+        relativeMap.put(new GymSectionFactory().create().getTableID(), getGymSections());
+        relativeMap.put(new SubscriptionFactory().create().getTableID(), getSubscriptions());
+        return relativeMap;
     }
 }
