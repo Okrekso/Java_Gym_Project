@@ -3,6 +3,8 @@ package servlets.entitiesOps;
 import database.DBEntity;
 import database.GymDB;
 import database.IDBEntityFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,6 +20,7 @@ import java.util.stream.Collectors;
 
 @WebServlet(name = "AddEntitySubmitServlet")
 public class AddEntitySubmitServlet extends HttpServlet {
+    static final Logger log = LogManager.getLogger(GetEntityListServlet.class);
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         GymDB db = new GymDB();
         String entityName = request.getParameter("entity");
@@ -43,8 +46,14 @@ public class AddEntitySubmitServlet extends HttpServlet {
                 request.setAttribute("successCode", "success");
             else
                 request.setAttribute("successCode", "error");
+            //            logging add
+            log.info(String.format("adding new entity to table %s",
+                    factory.create().getTableID(),
+                    request.getAttribute("successCode")));
+            log.info("params:");
+            log.info(mappedParams);
         } catch (Exception ex) {
-            System.out.println(ex.getMessage());
+            log.error(ex);
             request.setAttribute("successCode", "error");
         }
         finally {

@@ -6,7 +6,7 @@
 
     <Appenders>
         <Console name="consoleAppender">
-            <PatternLayout pattern="%d{dd MMM HH:mm:ss} %highlight{[ %-5level] %c{1}(line %L): %msg%n}"
+            <PatternLayout pattern="%d{dd MMM HH:mm:ss} %highlight{[%-5level] %c{1}(line %L): %msg%n}"
                            disableAnsi="false"/>
         </Console>
 
