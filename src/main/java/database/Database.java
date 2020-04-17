@@ -1,5 +1,9 @@
 package database;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import servlets.dbOps.DBCreationSubmitServlet;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -13,6 +17,7 @@ public abstract class Database {
     protected String user;
     protected String password;
     protected boolean driverFound=false;
+    protected static final Logger log = LogManager.getLogger(DBCreationSubmitServlet.class);
 
     public Database(String connectionURL, String user, String password) {
         this.connectionURL = connectionURL;
@@ -22,16 +27,18 @@ public abstract class Database {
             Class.forName("org.h2.Driver");
             this.driverFound = true;
         } catch (ClassNotFoundException e) {
-
+            log.error(e);
         }
     }
 
     public boolean isConnected() {
         try {
             Connection con = DriverManager.getConnection(connectionURL, user, password);
+            log.debug("database connected");
             return true;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            log.error(e);
+            log.info("database isn't connected");
             return false;
         }
     }
@@ -49,6 +56,7 @@ public abstract class Database {
             con.close();
             return true;
         } catch (SQLException e) {
+            log.error(e);
             return false;
         }
     }
@@ -58,9 +66,9 @@ public abstract class Database {
         try {
             Connection con = this.getConnection();
             ResultSet result = con.createStatement().executeQuery(query);
-//            con.close();
             return result;
         } catch (SQLException e) {
+            log.error(e);
             return null;
         }
     }
