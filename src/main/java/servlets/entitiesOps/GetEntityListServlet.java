@@ -14,8 +14,13 @@ import java.text.ParseException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 @WebServlet(name = "geEntityListServlet")
 public class GetEntityListServlet extends HttpServlet {
+    static Logger log = LogManager.getLogger(GetEntityListServlet.class);
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     }
@@ -23,13 +28,17 @@ public class GetEntityListServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String tableID = (String)request.getParameter("entity");
         GymDB db = new GymDB();
+        log.debug("start getting entities from " + tableID);
 
         IDBEntityFactory entityFactory = db.getFactoryByTableName(tableID);
         List<DBEntity> dbEntities = null;
         try {
             dbEntities = db.getFromEntityTable(entityFactory);
-        } catch (SQLException | ParseException e) {
+            log.debug("found " + dbEntities.size() + " entities");
+
+        } catch (NullPointerException | SQLException | ParseException e) {
             request.setAttribute("error", "unable to get");
+            log.error("error occupied while getting entities from DB: " + e.getMessage());
         }
         if(dbEntities!=null && request.getParameter("selected")!=null)
             request.setAttribute("selected", dbEntities.stream()
