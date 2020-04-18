@@ -15,14 +15,16 @@ public class Subscription extends DBEntity {
     private DBValue<Integer> duration;
     private DBValue<String> title;
     private DBValue<String> description;
+    private DBValue<Integer> gymID;
     private List<GymSection> accessSections;
 
-    public Subscription(int subscriptionID, float price, Integer duration, String title, String description) {
+    public Subscription(int subscriptionID, float price, Integer duration, String title, String description, Integer gymID) {
         super("Subscriptions", new DBValue("subscriptionID", subscriptionID, JDBCType.INTEGER), new GymDB());
         this.price = new DBValue<>("price", price, JDBCType.FLOAT).addNotNull().addDefaultValue(1);
         this.duration = new DBValue<>("duration", duration, JDBCType.INTEGER).addNotNull().addDefaultValue(7);
         this.title = new DBValue<>("title", title, JDBCType.NVARCHAR).addSize(255).addNotNull();
         this.description = new DBValue<>("description", description, JDBCType.NVARCHAR).addSize(255);
+        this.gymID = new DBValue<>("gymID", gymID, JDBCType.INTEGER).addForeignKey(new GymFactory());
 
         this.makeAddable();
         this.makeEditable();
@@ -56,7 +58,7 @@ public class Subscription extends DBEntity {
 
     @Override
     public List<DBValue> getVariables() {
-        return Arrays.asList(price, duration, title, description);
+        return Arrays.asList(price, duration, title, description, gymID);
     }
 }
 

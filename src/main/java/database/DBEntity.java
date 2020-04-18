@@ -2,6 +2,9 @@ package database;
 
 import logic.gym.GymSection;
 import logic.gym.GymSectionFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import servlets.dbOps.DBCreationSubmitServlet;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,6 +16,7 @@ public abstract class DBEntity implements IDBEntity {
     protected String tableID;
     protected DBValue<Integer> entityID;
     protected Database db;
+    protected static final Logger log = LogManager.getLogger(DBCreationSubmitServlet.class);
 
 //    database accessibility parameters
     protected boolean deletable = false;
@@ -53,13 +57,20 @@ public abstract class DBEntity implements IDBEntity {
     }
 
     public final boolean update() {
-        return getDatabase().updateTable(getTableID(), getVariables(true));
+        boolean result = getDatabase().updateTable(getTableID(), getVariables(true));
+        if(result) {
+            log.info("entity " + toString() + " updated successfully");
+        } else {
+            log.error("update of entity ");
+        }
+        return result;
     };
 
 
     @Override
     public String toString() {
-        return "#" + this.getEntityID().getValue() + ". (" + this.getVariables().stream()
+        return String.format("(%s)", getTableID()) + " #" + this.getEntityID().getValue()
+                + ". (" + this.getVariables().stream()
                 .map(element-> element.getValue().toString())
                 .collect(Collectors.joining(", ")) + ")";
     }
@@ -88,7 +99,6 @@ public abstract class DBEntity implements IDBEntity {
         if(resultSet==null) return null;
         List<DBEntity> entities = new ArrayList<>();
         while(resultSet.next()) {
-            factory.create().getVariablesWithID().get(0).getTitle();
             Map<String, String> readyValues = factory.create().getVariablesWithID().stream()
                     .map(dbValue -> dbValue.getTitle())
                     .collect(Collectors.toMap(title->title, title-> {
@@ -105,6 +115,7 @@ public abstract class DBEntity implements IDBEntity {
 
     protected List getRelativeEntityList(DBValue foreignKeyValue, IDBEntityFactory foreignKeyFactory)
             throws SQLException, ParseException {
+        if(foreignKeyValue.getValue().equals(-1)) return new ArrayList();
         List<DBEntity> entities = db.getFromEntityTable(
                 foreignKeyFactory,
                 String.format("%s=%s", foreignKeyValue.getTitle(), foreignKeyValue.getValue())

@@ -1,5 +1,9 @@
 package database;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import servlets.dbOps.DBCreationSubmitServlet;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -13,6 +17,7 @@ public abstract class Database {
     protected String user;
     protected String password;
     protected boolean driverFound=false;
+    protected static final Logger log = LogManager.getLogger(DBCreationSubmitServlet.class);
 
     public Database(String connectionURL, String user, String password) {
         this.connectionURL = connectionURL;
@@ -22,7 +27,7 @@ public abstract class Database {
             Class.forName("org.h2.Driver");
             this.driverFound = true;
         } catch (ClassNotFoundException e) {
-
+            log.warn(e);
         }
     }
 
@@ -31,7 +36,8 @@ public abstract class Database {
             Connection con = DriverManager.getConnection(connectionURL, user, password);
             return true;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            log.warn(e);
+            log.info("database isn't connected");
             return false;
         }
     }
@@ -49,20 +55,16 @@ public abstract class Database {
             con.close();
             return true;
         } catch (SQLException e) {
+            log.error(e);
             return false;
         }
     }
 
-    public ResultSet executeQuery(String query) {
+    public ResultSet executeQuery(String query) throws SQLException {
         if(!isConnected()) return null;
-        try {
             Connection con = this.getConnection();
             ResultSet result = con.createStatement().executeQuery(query);
-//            con.close();
             return result;
-        } catch (SQLException e) {
-            return null;
-        }
     }
 
     protected boolean insertIntoTable(String tableID, String dataTemplate, String data) {
@@ -87,7 +89,12 @@ public abstract class Database {
     }
 
     public boolean updateTable(String tableID, String setVariables, String condition) {
-        ResultSet res = executeQuery(String.format("UPDATE %s SET %s WHERE %s", tableID, setVariables, condition));
+        ResultSet res = null;
+        try {
+            res = executeQuery(String.format("UPDATE %s SET %s WHERE %s", tableID, setVariables, condition));
+        } catch (SQLException e) {
+            log.error("error occupied while updating table: ", e);
+        }
         return res==null;
     }
     public boolean updateTable(String tableID, String setVariables) {
@@ -107,7 +114,6 @@ public abstract class Database {
     }
 
     public DBEntity getEmptyEntity(String tableID) {
-        List<DBEntity> list = this.getDBEntities();
         return this.getDBEntities()
                 .stream()
                 .filter(dbEntity-> dbEntity.getTableID().toLowerCase().equals(tableID.toLowerCase()))
