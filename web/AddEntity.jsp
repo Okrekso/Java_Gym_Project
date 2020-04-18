@@ -61,7 +61,6 @@
                 <c:if test="${dbValue.isForeignKey()}">
                     <select name="${dbValue.getTitle()}">
                         <c:forEach var="selectEntity" items="${
-                        dbValue.getForeignKeyFactory() != null &&
                         db.getFromEntityTable(dbValue.getForeignKeyFactory())}">
                             <option value="${selectEntity.getEntityID().getValue()}">${selectEntity.toString()}</option>
                         </c:forEach>

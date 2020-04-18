@@ -15,7 +15,7 @@ public class SubscriptionFactory implements IDBEntityFactory {
     @Override
     public DBEntity create(Map<String, String> parameters) throws ParseException {
         return new Subscription(getId(parameters, create().getEntityID().getTitle()),
-                Integer.parseInt(parameters.get("price")),
+                Float.parseFloat(parameters.get("price")),
                 Integer.parseInt(parameters.get("duration")),
                 parameters.get("title"), parameters.get("description"), Integer.parseInt(parameters.get("gymID"))
         );
