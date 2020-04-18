@@ -24,9 +24,11 @@
     <h1>
         <c:if test="${successDelete}">
             Deleted successfully!
+            <a href="/">go back</a>
         </c:if>
         <c:if test="${!successDelete}">
             Deletion failure!
+            <a href="/">go back</a>
         </c:if>
     </h1>
 </body>

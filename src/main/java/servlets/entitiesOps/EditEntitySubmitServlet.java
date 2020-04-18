@@ -3,6 +3,8 @@ package servlets.entitiesOps;
 import database.DBEntity;
 import database.GymDB;
 import database.IDBEntityFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,6 +19,7 @@ import java.util.stream.Collectors;
 
 @WebServlet(name = "EditEntitySubmitServlet")
 public class EditEntitySubmitServlet extends HttpServlet {
+    static final Logger log = LogManager.getLogger(GetEntityListServlet.class);
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         GymDB db = new GymDB();
         String entityName = request.getParameter("entity");
@@ -43,11 +46,16 @@ public class EditEntitySubmitServlet extends HttpServlet {
                 request.setAttribute("successCode", "e-success");
             else
                 request.setAttribute("successCode", "error");
+//            logging edit
+            log.info(String.format("edit of id:%s of table %s: %s", request.getParameter("id"),
+                    factory.create().getTableID(),
+                    request.getAttribute("successCode")));
+
         } catch (NullPointerException | ParseException ex) {
             if(ex.getClass() == NullPointerException.class)
-                System.out.println("error! No such entity Factory");
+                log.error("error! No such entity Factory");
             if(ex.getClass() == ParseException.class)
-                System.out.println("invalid date format!");
+                log.error("invalid date format!");
             request.setAttribute("successCode", "error");
         }
         finally {

@@ -3,6 +3,7 @@ package database;
 import logic.gym.*;
 import logic.visitors.MemberFactory;
 
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -26,7 +27,11 @@ public class GymDB extends Database {
 
     @Override
     public boolean isDBcreated() {
-        return executeQuery("SELECT * FROM "+new Info(0, new Date(), "").getTableID()) != null;
+        try {
+            return executeQuery("SELECT * FROM "+ new InfoFactory().create().getTableID()) != null;
+        } catch (SQLException e) {
+            return false;
+        }
     }
 
     @Override

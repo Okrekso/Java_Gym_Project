@@ -24,14 +24,13 @@ public class Gym extends DBEntity implements IDBContainRelative {
         this.makeAddable();
         this.makeDeletable();
         this.makeEditable();
-        GymDB db = new GymDB();
 
         try {
 //            getting gymSections & subscriptions from it's table
             this.gymSections = getRelativeEntityList(this.getEntityID(), new GymSectionFactory());
             this.subscriptions = getRelativeEntityList(this.getEntityID(), new SubscriptionFactory());
         } catch (Exception e) {
-            e.printStackTrace();
+            log.info("no relative entities found for " + toString() + ": " + e.getMessage());
         }
 
         this.title = new DBValue<>("title", title, JDBCType.NVARCHAR).addSize(255).addNotNull();
