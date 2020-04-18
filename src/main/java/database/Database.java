@@ -27,17 +27,16 @@ public abstract class Database {
             Class.forName("org.h2.Driver");
             this.driverFound = true;
         } catch (ClassNotFoundException e) {
-            log.error(e);
+            log.warn(e);
         }
     }
 
     public boolean isConnected() {
         try {
             Connection con = DriverManager.getConnection(connectionURL, user, password);
-            log.debug("database connected");
             return true;
         } catch (SQLException e) {
-            log.error(e);
+            log.warn(e);
             log.info("database isn't connected");
             return false;
         }
@@ -61,16 +60,11 @@ public abstract class Database {
         }
     }
 
-    public ResultSet executeQuery(String query) {
+    public ResultSet executeQuery(String query) throws SQLException {
         if(!isConnected()) return null;
-        try {
             Connection con = this.getConnection();
             ResultSet result = con.createStatement().executeQuery(query);
             return result;
-        } catch (SQLException e) {
-            log.error(e);
-            return null;
-        }
     }
 
     protected boolean insertIntoTable(String tableID, String dataTemplate, String data) {
@@ -95,7 +89,12 @@ public abstract class Database {
     }
 
     public boolean updateTable(String tableID, String setVariables, String condition) {
-        ResultSet res = executeQuery(String.format("UPDATE %s SET %s WHERE %s", tableID, setVariables, condition));
+        ResultSet res = null;
+        try {
+            res = executeQuery(String.format("UPDATE %s SET %s WHERE %s", tableID, setVariables, condition));
+        } catch (SQLException e) {
+            log.error("error occupied while updating table: ", e);
+        }
         return res==null;
     }
     public boolean updateTable(String tableID, String setVariables) {
@@ -115,7 +114,6 @@ public abstract class Database {
     }
 
     public DBEntity getEmptyEntity(String tableID) {
-        List<DBEntity> list = this.getDBEntities();
         return this.getDBEntities()
                 .stream()
                 .filter(dbEntity-> dbEntity.getTableID().toLowerCase().equals(tableID.toLowerCase()))

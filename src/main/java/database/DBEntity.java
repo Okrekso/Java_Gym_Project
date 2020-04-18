@@ -99,7 +99,6 @@ public abstract class DBEntity implements IDBEntity {
         if(resultSet==null) return null;
         List<DBEntity> entities = new ArrayList<>();
         while(resultSet.next()) {
-            factory.create().getVariablesWithID().get(0).getTitle();
             Map<String, String> readyValues = factory.create().getVariablesWithID().stream()
                     .map(dbValue -> dbValue.getTitle())
                     .collect(Collectors.toMap(title->title, title-> {
@@ -116,6 +115,7 @@ public abstract class DBEntity implements IDBEntity {
 
     protected List getRelativeEntityList(DBValue foreignKeyValue, IDBEntityFactory foreignKeyFactory)
             throws SQLException, ParseException {
+        if(foreignKeyValue.getValue().equals(-1)) return new ArrayList();
         List<DBEntity> entities = db.getFromEntityTable(
                 foreignKeyFactory,
                 String.format("%s=%s", foreignKeyValue.getTitle(), foreignKeyValue.getValue())

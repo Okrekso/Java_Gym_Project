@@ -26,7 +26,7 @@ public class GetEntityListServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String tableID = (String)request.getParameter("entity");
+        String tableID = request.getParameter("entity");
         GymDB db = new GymDB();
         log.debug("start getting entities from " + tableID);
 
@@ -36,9 +36,9 @@ public class GetEntityListServlet extends HttpServlet {
             dbEntities = db.getFromEntityTable(entityFactory);
             log.debug("found " + dbEntities.size() + " entities");
 
-        } catch (NullPointerException | SQLException | ParseException e) {
+        } catch ( SQLException | ParseException e) {
             request.setAttribute("error", "unable to get");
-            log.error("error occupied while getting entities from DB: " + e.getMessage());
+            log.error("error occupied while getting entities from DB: ", e);
         }
         if(dbEntities!=null && request.getParameter("selected")!=null)
             request.setAttribute("selected", dbEntities.stream()
