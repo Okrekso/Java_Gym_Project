@@ -42,7 +42,7 @@ public class AddEntitySubmitServlet extends HttpServlet {
                             .create().getTableID().toLowerCase().equals(entityName.toLowerCase()))
                     .collect(Collectors.toList()).get(0);
 
-            if(db.addToTable(factory.create(mappedParams)))
+            if(db.addToTable(factory.create(mappedParams)) != null)
                 request.setAttribute("successCode", "success");
             else
                 request.setAttribute("successCode", "error");

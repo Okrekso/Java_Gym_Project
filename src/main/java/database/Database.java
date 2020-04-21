@@ -136,5 +136,5 @@ public abstract class Database {
      * @param entity element which'll be added to a table
      * @return is add process finished successfully
      */
-    public abstract boolean addToTable(DBEntity entity);
+    public abstract DBEntity addToTable(DBEntity entity);
 }

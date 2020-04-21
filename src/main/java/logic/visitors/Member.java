@@ -8,6 +8,7 @@ import logic.gym.Visit;
 
 import java.sql.JDBCType;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 

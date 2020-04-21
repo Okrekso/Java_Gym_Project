@@ -4,6 +4,7 @@ import logic.gym.*;
 import logic.visitors.MemberFactory;
 
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -17,8 +18,16 @@ public class GymDB extends Database {
         super("jdbc:h2:mem:gymdb", "PUBLIC", "");
     }
     @Override
-    public boolean addToTable(DBEntity entity) {
-        return this.insertIntoTable(entity.getTableID(), entity.getColumns(false, false), entity.getVariables(false));
+    public DBEntity addToTable(DBEntity entity) {
+        this.insertIntoTable(entity.getTableID(), entity.getColumns(false, false),
+                entity.getVariables(false));
+        try {
+            List<DBEntity> entities = getFromEntityTable(entity.getFactory());
+            return entities.get(entities.size()-1);
+        } catch (ParseException | SQLException e) {
+            log.error(e);
+            return null;
+        }
     }
 
     public String getTableCreationQuery(DBEntity entity) {
@@ -63,12 +72,16 @@ public class GymDB extends Database {
         for(String query : queries) {
             executeUpdate(query);
         }
-        return addToTable(new Info(0, new Date(), "DB creation"));
+        return addToTable(new Info(0, new Date(), "DB creation")) != null;
     }
 
     public boolean dropCurrentDB() {
         GymDB db = new GymDB();
-        List<String> tableIDs = getDBEntities().stream().map(dbEntity -> dbEntity.tableID).collect(Collectors.toList());
+        List<String> tableIDs = getDBEntities().stream()
+                .sorted(
+                        (e1, e2) -> Boolean.compare(e2.hasForeignKeys(), e1.hasForeignKeys())
+                )
+                .map(dbEntity -> dbEntity.tableID).collect(Collectors.toList());
         for(String tableID : tableIDs) {
             if(!db.executeUpdate("DROP TABLE " + tableID))
                 return false;
