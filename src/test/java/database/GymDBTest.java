@@ -40,6 +40,8 @@ class GymDBTest {
                 }
         ).collect(Collectors.toList());
 
+        log.info("========= foreign keys tests starts =========");
+
         Map<String, Boolean> foreignResults = db.getDBEntityFactories()
                 .stream()
                 .filter(factory -> factory.create().hasForeignKeys())
@@ -65,7 +67,6 @@ class GymDBTest {
                                         );
                                 try {
                                     DBEntity finalEntity = factory.createNotFull(values);
-                                    log.info("======== start entity adding to table ========");
                                     log.info("entity with relative values created:");
                                     log.info(finalEntity);
                                     if(db.addToTable(finalEntity)!=null) {
@@ -90,7 +91,6 @@ class GymDBTest {
                         factory -> factory.create().getTableID(),
                         factory -> true)
                 );
-
         Assert.assertArrayEquals(
                 noForeignResults.toArray(),
                 noForeignResults.stream().map(res->true).collect(Collectors.toList()).toArray()
