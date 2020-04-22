@@ -55,13 +55,15 @@ public class DBValue<T> {
     }
 
     public String inQuotes() {
+        T finalValue = value == null && isNotNull() ? defaultValue : value;
         if(type == JDBCType.DATE)
-            return DBValue.coverByQuotes(new SimpleDateFormat("YYYY-MM-dd").format(value));
-        return DBValue.coverByQuotes(value);
+            return DBValue.coverByQuotes(new SimpleDateFormat("yyyy-MM-dd").format(finalValue));
+        return DBValue.coverByQuotes(finalValue);
     }
 
     public String forSet() {
-        return title+"="+DBValue.coverByQuotes(value);
+        T finalValue = value == null && isNotNull() ? defaultValue : value;
+        return title+"="+DBValue.coverByQuotes(finalValue);
     }
 
     public DBValue addSize(int size) {
