@@ -1,12 +1,15 @@
 package database;
 
+import java.sql.Date;
 import java.sql.JDBCType;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 
 public class DBValue<T> {
     private String title;
     private T value;
     private T defaultValue;
+
     private JDBCType type;
     private int size = 0;
 
@@ -25,6 +28,10 @@ public class DBValue<T> {
     public DBValue(String title, JDBCType type) {
         this.title = title;
         this.type = type;
+    }
+
+    public JDBCType getType() {
+        return type;
     }
 
     public boolean isPrimary() {
@@ -48,11 +55,15 @@ public class DBValue<T> {
     }
 
     public String inQuotes() {
-        return DBValue.coverByQuotes(value);
+        T finalValue = value == null && isNotNull() ? defaultValue : value;
+        if(type == JDBCType.DATE)
+            return DBValue.coverByQuotes(new SimpleDateFormat("yyyy-MM-dd").format(finalValue));
+        return DBValue.coverByQuotes(finalValue);
     }
 
     public String forSet() {
-        return title+"="+DBValue.coverByQuotes(value);
+        T finalValue = value == null && isNotNull() ? defaultValue : value;
+        return title+"="+DBValue.coverByQuotes(finalValue);
     }
 
     public DBValue addSize(int size) {
