@@ -1,5 +1,6 @@
 package database;
 
+import logic.gym.Info;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import servlets.dbOps.DBCreationSubmitServlet;
@@ -9,6 +10,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -105,6 +107,43 @@ public abstract class Database {
         return executeUpdate(String.format("DELETE FROM %s WHERE %s=%s", tableID, idValue.getTitle(), idValue.getValue()));
     }
 
+    public IDBEntityFactory getFactoryByTableName(String tableID) {
+        List<IDBEntityFactory> factories = getDBEntityFactories().stream()
+                .filter(factory -> factory.create().getTableID().toLowerCase().equals(tableID.toLowerCase()))
+                .collect(Collectors.toList());
+        if(factories.size()>0)
+            return factories.get(0);
+        else
+            return null;
+    }
+
+    public String getTableCreationQuery(DBEntity entity) {
+        return "CREATE TABLE "+entity.getTableID()+"("+entity.getColumns(true, true)+")";
+    }
+
+    public boolean build() {
+        List<String> queries = getDBEntities().stream()
+                .map(dbEntity -> getTableCreationQuery(dbEntity))
+                .collect(Collectors.toList());
+        for(String query : queries) {
+            executeUpdate(query);
+        }
+        return isDBcreated();
+    }
+
+    public boolean dropCurrentDB() {
+        List<String> tableIDs = getDBEntities().stream()
+                .sorted(
+                        (e1, e2) -> Boolean.compare(e2.hasForeignKeys(), e1.hasForeignKeys())
+                )
+                .map(dbEntity -> dbEntity.tableID).collect(Collectors.toList());
+        for(String tableID : tableIDs) {
+            if(!executeUpdate("DROP TABLE " + tableID))
+                return false;
+        }
+        return true;
+    }
+
     /**
      * @return is connection successfully
      * @throws SQLException mean that connection failed somehow
@@ -130,11 +169,19 @@ public abstract class Database {
 
     public abstract List<IDBEntityFactory> getDBEntityFactories();
 
-    public abstract boolean build();
-
     /**
      * @param entity element which'll be added to a table
      * @return is add process finished successfully
      */
-    public abstract boolean addToTable(DBEntity entity);
+    public final DBEntity addToTable(DBEntity entity) {
+        this.insertIntoTable(entity.getTableID(), entity.getColumns(false, false),
+                entity.getVariables(false));
+        try {
+            List<DBEntity> entities = getFromEntityTable(entity.getFactory());
+            return entities.get(entities.size()-1);
+        } catch (ParseException | SQLException e) {
+            log.error(e);
+            return null;
+        }
+    }
 }

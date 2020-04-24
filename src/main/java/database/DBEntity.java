@@ -6,6 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import servlets.dbOps.DBCreationSubmitServlet;
 
+import java.sql.JDBCType;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -23,10 +24,21 @@ public abstract class DBEntity implements IDBEntity {
     protected boolean editable = false;
     protected boolean addable = false;
 
+    public static DBEntity setID(DBEntity entity, Integer id) {
+        entity.entityID = new DBValue<Integer>(entity.entityID.getTitle(), id, JDBCType.INTEGER);
+        return entity;
+    }
+
     protected DBEntity(String tableID, DBValue entityID, Database db) {
         this.tableID = tableID;
         this.entityID = entityID.addPrimaryKey().addAutoIncrement();
         this.db = db;
+    }
+
+    protected boolean hasForeignKeys() {
+        return this.getVariables().stream()
+                .filter(dbValue -> dbValue.isForeignKey())
+                .count() > 0;
     }
 
     protected DBEntity makeDeletable() {
