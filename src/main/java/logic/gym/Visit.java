@@ -5,10 +5,7 @@ import database.*;
 import java.sql.Array;
 import java.sql.JDBCType;
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -21,7 +18,7 @@ public class Visit extends DBEntity {
         super("Visits", new DBValue("visitID", visitID, JDBCType.INTEGER), new GymDB());
         this.visitDate = new DBValue<>("visitDate", visitDate, JDBCType.DATE);
         this.price = new DBValue<>("price", price, JDBCType.FLOAT);
-        this.gymID = new DBValue<>("gymID", gymID, JDBCType.INTEGER);
+        this.gymID = new DBValue<>("gymID", gymID, JDBCType.INTEGER).addForeignKey(new GymFactory());
 
         this.makeAddable();
         this.makeDeletable();
@@ -44,5 +41,4 @@ public class Visit extends DBEntity {
     public List<DBValue> getVariables() {
         return Arrays.asList(visitDate, price, gymID);
     }
-
 }
