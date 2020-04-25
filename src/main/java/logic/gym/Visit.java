@@ -1,6 +1,7 @@
 package logic.gym;
 
 import database.*;
+import logic.visitors.MemberFactory;
 
 import java.sql.Array;
 import java.sql.JDBCType;
@@ -12,13 +13,15 @@ import java.util.stream.Collectors;
 public class Visit extends DBEntity {
     private DBValue<Date> visitDate;
     private DBValue<Float> price;
+    private DBValue<Integer> memberID;
     private DBValue<Integer> gymID;
 
-    public Visit(int visitID, Date visitDate, float price, int gymID) {
+    public Visit(int visitID, Date visitDate, float price, int gymID, int memberID) {
         super("Visits", new DBValue("visitID", visitID, JDBCType.INTEGER), new GymDB());
         this.visitDate = new DBValue<>("visitDate", visitDate, JDBCType.DATE);
         this.price = new DBValue<>("price", price, JDBCType.FLOAT);
         this.gymID = new DBValue<>("gymID", gymID, JDBCType.INTEGER).addForeignKey(new GymFactory());
+        this.memberID = new DBValue<>("memberID", memberID, JDBCType.INTEGER).addForeignKey(new MemberFactory());
 
         this.makeAddable();
         this.makeDeletable();
@@ -39,6 +42,6 @@ public class Visit extends DBEntity {
 
     @Override
     public List<DBValue> getVariables() {
-        return Arrays.asList(visitDate, price, gymID);
+        return Arrays.asList(visitDate, price, gymID, memberID);
     }
 }
