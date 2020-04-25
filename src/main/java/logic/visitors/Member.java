@@ -1,10 +1,7 @@
 package logic.visitors;
 
 import database.*;
-import logic.gym.GymSectionFactory;
-import logic.gym.Subscription;
-import logic.gym.SubscriptionFactory;
-import logic.gym.Visit;
+import logic.gym.*;
 
 import java.sql.JDBCType;
 import java.sql.ResultSet;
@@ -27,7 +24,6 @@ public class Member extends DBEntity implements IVisitor, ISubscriptable, IDBCon
         this.makeAddable();
         this.makeDeletable();
         this.makeEditable();
-
     }
 
     @Override
@@ -79,7 +75,7 @@ public class Member extends DBEntity implements IVisitor, ISubscriptable, IDBCon
     @Override
     public Map<String, List<? extends DBEntity>> getRelativeValues() {
         Map<String, List<? extends DBEntity>> relativeMap = new HashMap<>();
-        relativeMap.put(new GymSectionFactory().create().getTableID(), getVisits());
+        relativeMap.put(new VisitFactory().create().getTableID(), getVisits());
         return relativeMap;
     }
 }
