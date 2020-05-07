@@ -103,6 +103,7 @@ class GymDBTest {
 
     @Test
     void getTableCreationQuery() {
+        db.build();
         List<Boolean> results = db.getDBEntityFactories().stream()
                 .sorted(
                         (f1, f2) -> Boolean.compare(f1.create().hasForeignKeys(), f2.create().hasForeignKeys())
