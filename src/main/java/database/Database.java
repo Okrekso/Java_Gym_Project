@@ -178,7 +178,10 @@ public abstract class Database {
                 entity.getVariables(false));
         try {
             List<DBEntity> entities = getFromEntityTable(entity.getFactory());
-            return entities.get(entities.size()-1);
+            if(entities.size()>0)
+                return entities.get(entities.size()-1);
+            else
+                return null;
         } catch (ParseException | SQLException e) {
             log.error(e);
             return null;
