@@ -23,6 +23,6 @@ for project as possible.
 1. Sepcify tomcat as a startup option. 
 1. Run project.
 1. You should see root page
-![root page](https://imgur.com/a/k8lIFu8)
+![root page](https://i.ibb.co/tMzgWm8/chrome-KJRpp-D6tv-Z.png)
 # Authors
 _Oskerko Semen_
