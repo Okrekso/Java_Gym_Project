@@ -122,7 +122,7 @@ class DBValueTest {
     void addDefaultValue() {
         ExampleEntity entity = new ExampleEntity(-1);
         entity.addValue(new DBValue<>("StringDefaultValue", null, JDBCType.NVARCHAR)
-                .addSize(255).addDefaultValue("Default value applied"));
+                .addSize(255).addDefaultValue("Default value applied").addNotNull());
 
         db.dropCurrentDB();
         db = new ExampleDB(Arrays.asList(createNewFactory(entity)));
