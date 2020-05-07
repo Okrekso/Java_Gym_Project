@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -24,11 +25,12 @@ class GymDBTest {
     @BeforeEach
     void setUp() {
         db = new GymDB();
+        db.dropCurrentDB();
+        db.build();
     }
 
     @Test
     void addToTable() {
-        db.build();
         List<Boolean> noForeignResults = db.getDBEntityFactories().stream()
                 .filter(factory -> !factory.create().hasForeignKeys())
                 .map(
@@ -103,35 +105,43 @@ class GymDBTest {
 
     @Test
     void getTableCreationQuery() {
-        db.build();
         List<Boolean> results = db.getDBEntityFactories().stream()
                 .sorted(
                         (f1, f2) -> Boolean.compare(f1.create().hasForeignKeys(), f2.create().hasForeignKeys())
                 )
                 .map(
                         factory -> {
-                            boolean result = db.addToTable(factory.create()) != null;
-                            if(result) log.info("test on "+factory.create().getTableID()+" successfully done!");
-                            else log.error("test on "+factory.create().getTableID()+" failure!");
+                            boolean result = true;
+                            if(!factory.create().hasForeignKeys())
+                                result = db.addToTable(factory.create()) != null;
+                            else
+                                log.warn("entity "+factory.create().getTableID() + " have foreign keys, so test on it's table creation'll be done in addToTable test");
+                            if(result) log.info("Get table creation query test on "+factory.create().getTableID()+" successfully done!");
+                            else log.error("Get table creation query test on "+factory.create().getTableID()+" failure!");
                             return result;
                         }
                 ).collect(Collectors.toList());
+        Boolean[] expectedResults = new Boolean[results.size()];
+        Arrays.fill(expectedResults, true);
+        Assert.assertArrayEquals(results.toArray(), expectedResults);
     }
 
     @Test
     void isDBcreated() {
-        db.build();
         Assert.assertTrue(db.isDBcreated());
     }
 
     @Test
     void build() {
+        if(db.isDBcreated())
+            db.dropCurrentDB();
         Assert.assertTrue(db.build());
     }
 
     @Test
     void dropCurrentDB() {
-        db.build();
+        if(!db.isDBcreated())
+            db.build();
         Assert.assertTrue(db.dropCurrentDB());
     }
 }
