@@ -25,7 +25,8 @@ class GymDBTest {
     @BeforeEach
     void setUp() {
         db = new GymDB();
-        db.dropCurrentDB();
+        if(db.isDBcreated())
+            db.dropCurrentDB();
         db.build();
     }
 
